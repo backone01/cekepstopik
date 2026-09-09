@@ -1289,12 +1289,14 @@
             });
         }
 
-        // Memuat Data Lengkap Peserta (peserta_data.json) & Lookup Hash
+        // Memuat Data Lengkap Peserta (peserta_data.json) & Lookup Hash - support array & object + __LOOKUP_DATA__ fallback
         async function loadPesertaData() {
             try {
                 let lookupPromise;
                 if (typeof __PESERTA_LOOKUP__ !== 'undefined') {
                     pesertaLookup = __PESERTA_LOOKUP__;
+                } else if (typeof __LOOKUP_DATA__ !== 'undefined') {
+                    pesertaLookup = __LOOKUP_DATA__;
                 } else {
                     lookupPromise = fetch('peserta_lookup.json').then(r => r.json()).then(d => { pesertaLookup = d; });
                 }
@@ -1307,7 +1309,29 @@
                     data = await res.json();
                 }
 
-                pesertaList = data;
+                // Convert array format [no,nama,lokasi,tgl,membaca,mendengar,total,status,gender] -> object {u,n,l,t,sm,sd,st,s,g}
+                if (Array.isArray(data) && data.length && Array.isArray(data[0])) {
+                    pesertaList = data.map(row => {
+                        const totalRaw = row[6];
+                        const hasScore = totalRaw !== '-' && totalRaw !== '' && totalRaw != null;
+                        let sLabel = 'Tidak Hadir';
+                        if (row[7] === 'LULUS') sLabel = 'Lulus';
+                        else if (hasScore) sLabel = 'Tidak Lulus';
+                        return {
+                            u: row[0],
+                            n: row[1],
+                            l: row[2],
+                            t: row[3],
+                            sm: row[4] === '-' ? null : parseFloat(row[4]),
+                            sd: row[5] === '-' ? null : parseFloat(row[5]),
+                            st: hasScore ? parseFloat(totalRaw) : '-',
+                            s: sLabel,
+                            g: row[8] === 'M' ? 'L' : (row[8] === 'F' ? 'P' : row[8])
+                        };
+                    });
+                } else {
+                    pesertaList = data;
+                }
                 filteredPeserta = [...pesertaList];
 
                 if (lookupPromise) await lookupPromise;
@@ -1527,9 +1551,34 @@
                 </div>
             `;
 
-            // Hash input dengan SHA-256
+            // Hash input dengan SHA-256 - support 16-char truncated key (old) & full 64
             const hashResult = await sha256(cleaned);
-            const foundData = pesertaLookup[hashResult];
+            const hash16 = hashResult.slice(0,16);
+            let foundRaw = pesertaLookup[hashResult] || pesertaLookup[hash16];
+            // Fallback pencarian truncated hash via array key (old peserta_lookup 16-char)
+            if (!foundRaw && pesertaLookup) {
+                // coba cari key yang startswith hash16 (jika ada collision handling)
+                const k = Object.keys(pesertaLookup).find(k => k.toLowerCase() === hash16.toLowerCase());
+                if (k) foundRaw = pesertaLookup[k];
+            }
+            // Normalize array format [no,nama,lokasi,tgl,membaca,mendengar,total,status] -> object {u,n,l,t,sm,sd,st,s}
+            let foundData = foundRaw;
+            if (Array.isArray(foundRaw)) {
+                const hasScore = foundRaw[6] !== '-' && foundRaw[6] !== '' && foundRaw[6] != null;
+                let sLabel = 'Tidak Hadir';
+                if (foundRaw[7] === 'LULUS') sLabel = 'Lulus';
+                else if (hasScore) sLabel = 'Tidak Lulus';
+                foundData = {
+                    u: foundRaw[0],
+                    n: foundRaw[1],
+                    l: foundRaw[2],
+                    t: foundRaw[3],
+                    sm: foundRaw[4] === '-' ? null : parseFloat(foundRaw[4]),
+                    sd: foundRaw[5] === '-' ? null : parseFloat(foundRaw[5]),
+                    st: hasScore ? parseFloat(foundRaw[6]) : '-',
+                    s: sLabel
+                };
+            }
 
             if (foundData) {
                 const isLulus = foundData.s === 'Lulus';
