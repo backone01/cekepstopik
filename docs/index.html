@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="id" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPS-TOPIK UBT 2026 - Dashboard Analitik & Cek Nilai Ujian | Sektor Manufaktur</title>
+    <meta name="description" content="Dashboard analitik EPS-TOPIK UBT 2026 Sektor Manufaktur. 17.619 peserta, cek nilai mandiri via nomor ujian, rekap kelulusan 97.5 poin, breakdown Semarang/Jakarta/Surabaya. Bukan publikasi resmi KP2MI.">
+    <meta name="keywords" content="EPS-TOPIK, UBT 2026, Manufaktur, KP2MI, BP2MI, HRD Korea, cek nilai EPS, kelulusan EPS-TOPIK">
+    <meta name="author" content="EPS-TOPIK 2026 Monitoring">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://backone01.github.io/exam-status-checker/">
+    <!-- Open Graph / WhatsApp / Telegram -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="EPS-TOPIK UBT 2026 - Cek Nilai & Rekap Kelulusan">
+    <meta property="og:description" content="Cek nilai mandiri 17.619 peserta EPS-TOPIK Manufaktur 2026. Lulus 2.031 (97.5 poin). Data rekap independen, bukan rilis resmi KP2MI.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/0d6efd/ffffff?text=EPS-TOPIK+UBT+2026+%7C+17.619+Peserta">
+    <meta property="og:url" content="https://backone01.github.io/exam-status-checker/">
+    <meta property="og:locale" content="id_ID">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="EPS-TOPIK UBT 2026 - Dashboard Kelulusan">
+    <meta name="twitter:description" content="Rekap 17.619 peserta, passing rate 12.66%. Cek nilai via nomor ujian.">
+    <meta name="twitter:image" content="https://via.placeholder.com/1200x630/0d6efd/ffffff?text=EPS-TOPIK+UBT+2026">
+    <meta name="theme-color" content="#0d6efd">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bs-body-bg: #f8fafc;
+            --bs-body-color: #1e293b;
+            --card-border-color: #e2e8f0;
+        }
+        [data-bs-theme="dark"] {
+            --bs-body-bg: #0f172a;
+            --bs-body-color: #f1f5f9;
+            --card-border-color: #1e293b;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+        }
+        .card {
+            border: 1px solid var(--card-border-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        .card-header {
+            background-color: transparent;
+            border-bottom: 1px solid var(--card-border-color);
+            font-weight: 600;
+        }
+        .stat-card-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1.2;
+            font-variant-numeric: tabular-nums;
+        }
+        .stat-card-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #64748b;
+        }
+        .font-mono {
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        /* Badge Kontras Tinggi */
+        .badge-status-lulus {
+            background-color: #16a34a;
+            color: #ffffff !important;
+            font-weight: 700;
+            padding: 0.35em 0.75em;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.02em;
+            display: inline-block;
+        }
+        .badge-status-gagal {
+            background-color: #dc2626;
+            color: #ffffff !important;
+            font-weight: 600;
+            padding: 0.35em 0.7em;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.02em;
+            display: inline-block;
+        }
+        .badge-status-absen {
+            background-color: #d97706;
+            color: #ffffff !important;
+            font-weight: 600;
+            padding: 0.35em 0.7em;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.02em;
+            display: inline-block;
+        }
+
+        /* Tabel Kontras Tinggi dengan Batas Tegas */
+        .table-custom {
+            border: 1px solid #cbd5e1;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+        .table-custom thead th {
+            background-color: #e2e8f0;
+            color: #0f172a;
+            font-weight: 700;
+            border-bottom: 2px solid #64748b;
+            border-right: 1px solid #cbd5e1;
+            white-space: nowrap;
+            padding: 0.7rem 0.75rem;
+            font-size: 0.82rem;
+            letter-spacing: 0.02em;
+        }
+        .table-custom thead th:last-child {
+            border-right: none;
+        }
+        .table-custom tbody td {
+            border-bottom: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            padding: 0.6rem 0.75rem;
+            vertical-align: middle;
+        }
+        .table-custom tbody td:last-child {
+            border-right: none;
+        }
+        .table-custom tbody tr:nth-of-type(even) {
+            background-color: #f8fafc;
+        }
+        .table-custom tbody tr:nth-of-type(odd) {
+            background-color: #ffffff;
+        }
+        .table-custom tbody tr:hover {
+            background-color: #dbeafe !important;
+        }
+
+        /* Overlay Warna Baris Tabel Berdasarkan Status (Hijau, Merah, Oren) */
+        .table-custom tbody tr.row-lulus td {
+            background-color: rgba(34, 197, 94, 0.12) !important;
+        }
+        .table-custom tbody tr.row-gagal td {
+            background-color: rgba(239, 68, 68, 0.08) !important;
+        }
+        .table-custom tbody tr.row-absen td {
+            background-color: rgba(245, 158, 11, 0.13) !important;
+        }
+        .table-custom tbody tr.row-lulus:hover td {
+            background-color: rgba(34, 197, 94, 0.22) !important;
+        }
+        .table-custom tbody tr.row-gagal:hover td {
+            background-color: rgba(239, 68, 68, 0.16) !important;
+        }
+        .table-custom tbody tr.row-absen:hover td {
+            background-color: rgba(245, 158, 11, 0.22) !important;
+        }
+
+        /* Mode Gelap Tabel */
+        [data-bs-theme="dark"] .table-custom {
+            border-color: #334155;
+        }
+        [data-bs-theme="dark"] .table-custom thead th {
+            background-color: #1e293b;
+            color: #f8fafc;
+            border-bottom: 2px solid #475569;
+            border-right: 1px solid #334155;
+        }
+        [data-bs-theme="dark"] .table-custom thead th:last-child {
+            border-right: none;
+        }
+        [data-bs-theme="dark"] .table-custom tbody td {
+            border-bottom: 1px solid #334155;
+            border-right: 1px solid #334155;
+        }
+        [data-bs-theme="dark"] .table-custom tbody td:last-child {
+            border-right: none;
+        }
+        [data-bs-theme="dark"] .table-custom tbody tr:nth-of-type(even) td {
+            background-color: #111c30;
+        }
+        [data-bs-theme="dark"] .table-custom tbody tr:nth-of-type(odd) td {
+            background-color: #0c1322;
+        }
+        [data-bs-theme="dark"] .table-custom tbody tr:hover td {
+            background-color: rgba(56, 189, 248, 0.18) !important;
+        }
+        [data-bs-theme="dark"] .table-custom tbody tr.row-lulus td {
+            background-color: rgba(34, 197, 94, 0.18) !important;
+        }
+        [data-bs-theme="dark"] .table-custom tbody tr.row-gagal td {
+            background-color: rgba(239, 68, 68, 0.15) !important;
+        }
+        [data-bs-theme="dark"] .table-custom tbody tr.row-absen td {
+            background-color: rgba(245, 158, 11, 0.18) !important;
+        }
+        [data-bs-theme="dark"] .table-custom tbody tr.row-lulus:hover td {
+            background-color: rgba(34, 197, 94, 0.3) !important;
+        }
+        [data-bs-theme="dark"] .table-custom tbody tr.row-gagal:hover td {
+            background-color: rgba(239, 68, 68, 0.25) !important;
+        }
+        [data-bs-theme="dark"] .table-custom tbody tr.row-absen:hover td {
+            background-color: rgba(245, 158, 11, 0.3) !important;
+        }
+
+        /* Sortable Table Header */
+        .sortable-th {
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.15s ease;
+        }
+        .sortable-th:hover {
+            background-color: #cbd5e1 !important;
+            color: #0d6efd;
+        }
+        [data-bs-theme="dark"] .sortable-th:hover {
+            background-color: #334155 !important;
+            color: #38bdf8;
+        }
+        .sort-icon {
+            opacity: 0.35;
+            font-size: 0.72rem;
+            margin-left: 3px;
+            display: inline-block;
+        }
+        .sort-icon.active {
+            opacity: 1;
+            color: #0d6efd;
+            font-weight: bold;
+        }
+        [data-bs-theme="dark"] .sort-icon.active {
+            color: #38bdf8;
+        }
+
+        /* Mode Kartu Peserta (Alternatif Tabel) */
+        .peserta-card {
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+            position: relative;
+        }
+        .peserta-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: #94a3b8;
+        }
+        [data-bs-theme="dark"] .peserta-card {
+            background-color: #111c30;
+            border-color: #334155;
+        }
+        [data-bs-theme="dark"] .peserta-card:hover {
+            border-color: #475569;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Kartu Rincian Frekuensi Nilai (Bukan Tabel) */
+        .score-chip {
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            padding: 0.65rem 0.75rem;
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+        .score-chip:hover {
+            border-color: #0d6efd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(13, 110, 253, 0.12);
+        }
+        .score-chip.chip-lulus {
+            border-left: 4px solid #16a34a;
+        }
+        .score-chip.chip-gagal {
+            border-left: 4px solid #dc2626;
+        }
+        [data-bs-theme="dark"] .score-chip {
+            background: #111c30;
+            border-color: #334155;
+        }
+
+        /* Compact Score Pills Bar & Aligned Grid (Rapi, Lurus, Rata, dengan Satuan "Orang") */
+        .score-pill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+            gap: 0.4rem;
+        }
+        @media (max-width: 576px) {
+            .score-pill-grid {
+                grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+                gap: 0.35rem;
+            }
+        }
+        .score-pill {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.4rem 0.65rem;
+            border-radius: 0.375rem;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+            font-size: 0.78rem;
+            cursor: default;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+            border: 1px solid #cbd5e1;
+            background-color: #ffffff;
+            user-select: none;
+        }
+        .score-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            border-color: #0d6efd;
+        }
+        .score-pill.pill-lulus {
+            background-color: #f0fdf4;
+            border-color: #86efac;
+            color: #166534;
+        }
+        .score-pill.pill-lulus:hover {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+        }
+        .score-pill.pill-high {
+            background-color: #fffbeb;
+            border-color: #fde68a;
+            color: #854d0e;
+        }
+        .score-pill.pill-high:hover {
+            background-color: #fef3c7;
+            border-color: #f59e0b;
+        }
+        .score-pill.pill-regular {
+            background-color: #f8fafc;
+            color: #334155;
+            border-color: #e2e8f0;
+        }
+        .score-pill.pill-regular:hover {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+        }
+        [data-bs-theme="dark"] .score-pill.pill-lulus {
+            background-color: rgba(34, 197, 94, 0.12);
+            border-color: rgba(34, 197, 94, 0.35);
+            color: #86efac;
+        }
+        [data-bs-theme="dark"] .score-pill.pill-high {
+            background-color: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.35);
+            color: #fcd34d;
+        }
+        [data-bs-theme="dark"] .score-pill.pill-regular {
+            background-color: #111c30;
+            border-color: #334155;
+            color: #cbd5e1;
+        }
+
+        .badge-subtle-success {
+            background-color: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+        .badge-subtle-danger {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+        .badge-subtle-warning {
+            background-color: #fef3c7;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+        [data-bs-theme="dark"] .badge-subtle-success {
+            background-color: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border-color: rgba(34, 197, 94, 0.25);
+        }
+        [data-bs-theme="dark"] .badge-subtle-danger {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border-color: rgba(239, 68, 68, 0.25);
+        }
+        [data-bs-theme="dark"] .badge-subtle-warning {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border-color: rgba(245, 158, 11, 0.25);
+        }
+        .cursor-pointer {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar Bersih, Proporsional & Rapi -->
+    <nav class="navbar bg-body border-bottom sticky-top shadow-sm py-2">
+        <div class="container-fluid px-3 px-lg-4 d-flex align-items-center justify-content-between flex-nowrap">
+            <!-- Brand Logo & Title -->
+            <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none m-0 p-0 text-truncate" href="#">
+                <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-3 p-2 flex-shrink-0 shadow-sm" style="width: 38px; height: 38px;">
+                    <i class="bi bi-mortarboard-fill fs-5"></i>
+                </div>
+                <div class="d-flex flex-column text-truncate">
+                    <span class="fs-6 fw-bold text-body lh-sm text-truncate">EPS-TOPIK <span class="text-primary">UBT 2026</span></span>
+                    <span class="text-secondary small fw-normal text-truncate" style="font-size: 0.7rem;">Sektor Manufaktur &bull; Rekapitulasi Kelulusan</span>
+                </div>
+            </a>
+            
+            <!-- Navbar Actions -->
+            <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-2">
+                <a href="#section-cek-nilai" class="btn btn-primary btn-sm fw-semibold d-inline-flex align-items-center gap-1.5 px-2.5 px-sm-3 py-1.5 rounded-3 shadow-sm text-nowrap">
+                    <i class="bi bi-search"></i> <span class="d-none d-sm-inline">Cek Nilai Peserta</span><span class="d-inline d-sm-none">Cek Nilai</span>
+                </a>
+                <button class="btn btn-outline-secondary btn-sm rounded-3 px-2.5 py-1.5 d-flex align-items-center justify-content-center" id="themeToggleBtn" onclick="toggleTheme()" title="Mode Terang / Gelap" style="width: 34px; height: 34px;">
+                    <i class="bi bi-moon-stars" id="themeIcon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container-fluid px-lg-4 py-3">
+
+        <!-- Disclaimer Sumber Data -->
+        <div class="alert alert-warning border border-warning-subtle d-flex gap-3 p-3 mb-3 rounded-3 shadow-sm" role="alert">
+            <div class="d-flex align-items-start pt-1"><i class="bi bi-shield-exclamation fs-5 text-warning-emphasis"></i></div>
+            <div class="small lh-base">
+                <div class="fw-bold text-warning-emphasis">Disclaimer Sumber Data</div>
+                <div class="text-body-secondary mt-1">
+                    Dashboard ini <strong>bukan publikasi resmi KP2MI / BP2MI / HRD Korea</strong>. Data disusun secara independen dari <strong>rekapitulasi jadwal ujian dan pengecekan nilai mandiri via sistem EPS-TOPIK (eps.go.kr)</strong> untuk keperluan monitoring, transparansi, dan referensi peserta. Validasi kelulusan resmi tetap mengacu pada pengumuman KP2MI. Jika ada ketidaksesuaian, rujukan utama adalah pengumuman resmi.
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Announcement / Overview Alert -->
+        <div class="alert alert-primary border d-flex flex-wrap align-items-center justify-content-between p-3 mb-4 gap-3 rounded-3 shadow-sm">
+            <div>
+                <div class="fw-bold text-primary-emphasis fs-6 d-flex align-items-center gap-2">
+                    <i class="bi bi-info-circle-fill text-primary"></i> 
+                    <span>Hasil Ujian Bahasa Korea EPS-TOPIK UBT Sektor Manufaktur Tahun 2026</span>
+                </div>
+                <div class="small text-secondary mt-1 lh-base">
+                    Data ini merupakan rekapitulasi hasil ujian peserta EPS-TOPIK 2026. Peserta yang dinyatakan <strong>LULUS (skor &ge; 97.5 poin)</strong> berhak lolos dan mengikuti tahap <strong>Skill Test (Uji Keterampilan)</strong> selanjutnya.
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-success text-white px-3 py-2 font-mono fs-7 shadow-sm">
+                    <i class="bi bi-check-circle-fill me-1"></i> Standar Kelulusan: &ge; 97.5 Poin
+                </span>
+            </div>
+        </div>
+
+        <!-- Skeleton loading -->
+        <div id="skeleton-loader" class="row g-3 mb-4">
+            <div class="col-6 col-md-4 col-xl"><div class="card h-100"><div class="card-body"><div class="placeholder-glow"><span class="placeholder col-6"></span><div class="placeholder col-8 mt-2" style="height:28px"></div></div></div></div></div>
+            <div class="col-6 col-md-4 col-xl"><div class="card h-100"><div class="card-body"><div class="placeholder-glow"><span class="placeholder col-6"></span><div class="placeholder col-8 mt-2" style="height:28px"></div></div></div></div></div>
+            <div class="col-6 col-md-4 col-xl"><div class="card h-100"><div class="card-body"><div class="placeholder-glow"><span class="placeholder col-6"></span><div class="placeholder col-8 mt-2" style="height:28px"></div></div></div></div></div>
+            <div class="col-6 col-md-6 col-xl"><div class="card h-100"><div class="card-body"><div class="placeholder-glow"><span class="placeholder col-6"></span><div class="placeholder col-8 mt-2" style="height:28px"></div></div></div></div></div>
+            <div class="col-12 col-md-6 col-xl"><div class="card h-100"><div class="card-body"><div class="placeholder-glow"><span class="placeholder col-6"></span><div class="placeholder col-8 mt-2" style="height:28px"></div></div></div></div></div>
+        </div>
+        <!-- 5 Summary KPI Cards -->
+        <div class="row g-3 mb-4" id="kpi-cards" style="display:none">
+            <div class="col-6 col-md-4 col-xl">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="stat-card-label">Total Peserta</div>
+                        <div class="stat-card-value text-body mt-1 font-mono" id="stat-total">17,619</div>
+                        <div class="small text-secondary mt-1"><i class="bi bi-check2-all text-primary"></i> 100% Terdata Lengkap</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-xl">
+                <div class="card h-100 border-start border-success border-3">
+                    <div class="card-body">
+                        <div class="stat-card-label">Lulus (&ge; 97.5)</div>
+                        <div class="stat-card-value text-success mt-1 font-mono" id="stat-lulus">2,031</div>
+                        <div class="small text-success-emphasis mt-1" id="stat-lulus-pct">11.53% dari total</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-xl">
+                <div class="card h-100 border-start border-danger border-3">
+                    <div class="card-body">
+                        <div class="stat-card-label">Tidak Lulus</div>
+                        <div class="stat-card-value text-danger mt-1 font-mono" id="stat-tidaklulus">14,014</div>
+                        <div class="small text-danger-emphasis mt-1">Skor &lt; Standar Kelulusan</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-6 col-xl">
+                <div class="card h-100 border-start border-warning border-3">
+                    <div class="card-body">
+                        <div class="stat-card-label">Tidak Hadir / Nihil</div>
+                        <div class="stat-card-value text-warning-emphasis mt-1 font-mono" id="stat-tidakhadir">1,574</div>
+                        <div class="small text-secondary mt-1">Tanpa perolehan skor</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-xl">
+                <div class="card h-100 border-start border-primary border-3">
+                    <div class="card-body">
+                        <div class="stat-card-label">Passing Rate</div>
+                        <div class="stat-card-value text-primary mt-1 font-mono" id="stat-passing-rate">12.66%</div>
+                        <div class="small text-secondary mt-1" id="stat-peserta-hadir">16.045 peserta hadir ujian</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Pencarian Nilai Peserta (Exam Status Checker) - Dibuat Lebih Menonjol & Mudah Diakses -->
+        <div class="card mb-4 border-2 border-primary shadow" id="section-cek-nilai" style="border-radius: 0.75rem; background: linear-gradient(180deg, var(--bs-body-bg) 0%, rgba(13, 110, 253, 0.03) 100%);">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3 px-3 px-md-4 rounded-top">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-white text-primary fw-bold p-2 fs-6 rounded-circle shadow-sm">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <div>
+                        <h5 class="mb-0 fw-bold fs-6 text-white">Pengecekan Nilai & Status Kelulusan Peserta</h5>
+                        <div class="small opacity-90 text-white-50" style="font-size: 0.78rem;">Verifikasi langsung nilai per individu dengan nomor ujian resmi</div>
+                    </div>
+                </div>
+                <span class="badge bg-light text-primary border fw-semibold px-2.5 py-1.5 font-mono d-none d-sm-inline-block">
+                    EPS-TOPIK UBT 2026
+                </span>
+            </div>
+            <div class="card-body p-3 p-md-4">
+                <div class="row align-items-center g-3">
+                    <div class="col-12 col-lg-7">
+                        <form onsubmit="searchCandidate(event)" class="d-flex flex-column flex-sm-row gap-2">
+                            <div class="input-group input-group-lg flex-grow-1">
+                                <span class="input-group-text bg-body border-primary-subtle text-primary">
+                                    <i class="bi bi-person-badge"></i>
+                                </span>
+                                <input type="text" id="check-input" class="form-control form-control-lg border-primary-subtle font-mono" placeholder="Masukkan No Ujian (misal: 50800016 atau 0122026C50800016)..." required style="font-size: 0.95rem;">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg text-nowrap px-4 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-1.5">
+                                <i class="bi bi-search"></i> <span>Cek Nilai</span>
+                            </button>
+                        </form>
+                        <div class="small text-secondary mt-2 d-flex flex-wrap align-items-center gap-2">
+                            <span><i class="bi bi-info-circle text-primary me-1"></i>Dapat menggunakan <strong>8 digit</strong> nomor (contoh: <code>50800016</code>) atau <strong>16 digit lengkap</strong> (contoh: <code>0122026C50800016</code>).</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5">
+                        <div id="check-result-box" class="p-3 rounded-3 border bg-body shadow-sm" style="min-height: 80px;">
+                            <div class="text-secondary small text-center py-2 d-flex flex-column align-items-center justify-content-center">
+                                <i class="bi bi-card-checklist fs-4 text-primary opacity-50 mb-1"></i>
+                                <span>Hasil rincian nilai & status kelulusan peserta akan tampil di sini.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Grafik & Visualisasi Statistik -->
+        <div class="row g-3 mb-4">
+            <!-- 1. Doughnut Chart Kelulusan & Ringkasan Singkat -->
+            <div class="col-12 col-lg-5">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-body"><i class="bi bi-pie-chart-fill me-1 text-primary"></i> Proporsi Kelulusan</span>
+                        <span class="badge bg-success font-mono">Standar: 97.5</span>
+                    </div>
+                    <div class="card-body d-flex flex-column justify-content-between p-3">
+                        <div style="height: 200px; position: relative;">
+                            <canvas id="chartKelulusan"></canvas>
+                        </div>
+                        <div class="row text-center pt-2.5 mt-2 border-top g-1 font-mono">
+                            <div class="col-4">
+                                <div class="p-1.5 rounded bg-success-subtle border border-success-subtle">
+                                    <div class="text-success-emphasis" style="font-size: 0.7rem;">LULUS</div>
+                                    <div class="fw-bold text-success fs-6" id="legend-lulus">2,031</div>
+                                    <div class="text-secondary" style="font-size: 0.65rem;">11.5%</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-1.5 rounded bg-danger-subtle border border-danger-subtle">
+                                    <div class="text-danger-emphasis" style="font-size: 0.7rem;">TIDAK LULUS</div>
+                                    <div class="fw-bold text-danger fs-6" id="legend-tidaklulus">14,014</div>
+                                    <div class="text-secondary" style="font-size: 0.65rem;">79.5%</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-1.5 rounded bg-warning-subtle border border-warning-subtle">
+                                    <div class="text-warning-emphasis" style="font-size: 0.7rem;">TDK HADIR</div>
+                                    <div class="fw-bold text-warning-emphasis fs-6" id="legend-tidakhadir">1,574</div>
+                                    <div class="text-secondary" style="font-size: 0.65rem;">8.9%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info Ringkas Rata-rata Skor Kelulusan -->
+                        <div class="p-2 rounded bg-body-tertiary border mt-2.5 small d-flex justify-content-between align-items-center">
+                            <span class="text-secondary" style="font-size: 0.75rem;">Rata Skor Peserta Lulus:</span>
+                            <div class="font-mono" style="font-size: 0.78rem;">
+                                Baca: <strong class="text-success" id="avg-read-lulus">48.9</strong> &bull; Dengar: <strong class="text-success" id="avg-listen-lulus">49.4</strong> &bull; Total: <strong class="text-success">98.3</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Hasil Per Lokasi Ujian (Responsif di HP) -->
+            <div class="col-12 col-lg-7">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-body"><i class="bi bi-geo-alt-fill me-1 text-primary"></i> Hasil Per Lokasi Ujian</span>
+                        <span class="badge bg-secondary-subtle text-secondary border font-mono">Semarang &bull; Jakarta &bull; Surabaya</span>
+                    </div>
+                    <div class="card-body p-3 d-flex flex-column justify-content-between">
+                        <div style="height: 190px; position: relative;">
+                            <canvas id="chartLokasi"></canvas>
+                        </div>
+                        
+                        <!-- List Rinci Kota: Grid Box yang Enak Dilihat di HP -->
+                        <div class="row g-2 mt-2 pt-2 border-top" id="lokasi-summary-list">
+                            <!-- Diisi dinamis oleh JavaScript dengan kotak mini teratur -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Terpadu: Grafik & Frekuensi Nilai Peserta Lengkap -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-body-tertiary d-flex flex-wrap justify-content-between align-items-center gap-2 py-2.5">
+                <div>
+                    <span class="fw-bold text-body fs-6">
+                        <i class="bi bi-bar-chart-steps me-1.5 text-primary"></i> Frekuensi & Distribusi Nilai Ujian EPS-TOPIK
+                    </span>
+                    <span class="small text-secondary ms-1">(Rincian seluruh kelipatan 2.5 poin dari skor 10.0 s/d 100.0)</span>
+                </div>
+                <div class="d-flex flex-wrap align-items-center gap-1.5" style="font-size: 0.75rem;">
+                    <span class="badge bg-success text-white font-mono py-1 px-2">&ge; 97.5 (LULUS &bull; 2.031)</span>
+                    <span class="badge bg-warning text-dark font-mono py-1 px-2">90 - 95 (Passing Tinggi)</span>
+                    <span class="badge bg-secondary text-white font-mono py-1 px-2">&lt; 90</span>
+                </div>
+            </div>
+            <div class="card-body p-3">
+                <!-- Visual Grafik Frekuensi Lengkap Seluruh Nilai -->
+                <div class="table-responsive mb-2">
+                    <div style="height: 260px; min-width: 600px; position: relative;">
+                        <canvas id="chartSkorDistribusi"></canvas>
+                    </div>
+                </div>
+
+                <!-- Grid Rapi Frekuensi Seluruh Nilai Peserta Sejajar Lurus -->
+                <div class="pt-3 mt-3 border-top">
+                    <div class="small fw-semibold text-secondary mb-2 d-flex align-items-center gap-1.5">
+                        <i class="bi bi-grid-3x3-gap-fill text-primary"></i> Rincian Jumlah Orang Per Nilai Ujian:
+                    </div>
+                    <div class="score-pill-grid" id="exact-score-pills">
+                        <!-- Diisi seluruh frekuensi nilai dinamis oleh JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Tabel Data Lengkap Peserta Ujian (Client-Side Search & Filter) -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-body-tertiary d-flex flex-wrap justify-content-between align-items-center gap-2 py-3">
+                <div>
+                    <h5 class="card-title mb-0 fs-6 fw-bold text-body">
+                        <i class="bi bi-person-lines-fill me-1.5 text-primary"></i> Data Lengkap Peserta Ujian EPS-TOPIK
+                    </h5>
+                    <div class="text-secondary small mt-0.5">Filter peserta, klik header kolom untuk mengurutkan, atau ganti tampilan tabel / kartu</div>
+                </div>
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <!-- Toggle View: Tabel vs Kartu -->
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-primary btn-sm px-2.5" id="btn-view-table" onclick="setViewMode('table')" title="Tampilan Tabel Lengkap">
+                            <i class="bi bi-table me-1"></i> Tabel
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm px-2.5" id="btn-view-cards" onclick="setViewMode('cards')" title="Tampilan Kartu Profil">
+                            <i class="bi bi-grid-fill me-1"></i> Kartu
+                        </button>
+                    </div>
+
+                    <button class="btn btn-outline-danger btn-sm px-2.5" onclick="resetAllFilters()" title="Bersihkan semua filter">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                    </button>
+                    <span class="badge bg-primary text-white px-3 py-2 fs-7 font-mono">
+                        Hasil: <strong id="table-count">0</strong> Data
+                    </span>
+                </div>
+            </div>
+
+            <!-- Toolbar Filter Form -->
+            <div class="card-body bg-body-tertiary border-bottom p-3">
+                <!-- Baris 1: Filter Kunci -->
+                <div class="row g-2 mb-2">
+                    <!-- Search Input -->
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label class="form-label small fw-semibold text-body mb-1">
+                            <i class="bi bi-search me-1 text-primary"></i> Cari Peserta / No Ujian
+                        </label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" id="search-input" onkeyup="filterClientData()" class="form-control form-control-sm" placeholder="Nama atau nomor ujian...">
+                            <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('search-input').value=''; filterClientData();" title="Hapus teks">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <label class="form-label small fw-semibold text-body mb-1">Status Kelulusan</label>
+                        <select id="filter-status" onchange="filterClientData()" class="form-select form-select-sm">
+                            <option value="ALL">Semua Status</option>
+                            <option value="LULUS">LULUS (&ge; 97.5)</option>
+                            <option value="TIDAK LULUS">TIDAK LULUS (Ada Skor)</option>
+                            <option value="TIDAK HADIR">TIDAK HADIR (Nihil)</option>
+                        </select>
+                    </div>
+
+                    <!-- Lokasi Filter -->
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <label class="form-label small fw-semibold text-body mb-1">Lokasi Ujian</label>
+                        <select id="filter-lokasi" onchange="filterClientData()" class="form-select form-select-sm">
+                            <option value="ALL">Semua Lokasi</option>
+                            <option value="Semarang">Semarang</option>
+                            <option value="Jakarta">Jakarta</option>
+                            <option value="Surabaya">Surabaya</option>
+                        </select>
+                    </div>
+
+                    <!-- Gender Filter -->
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <label class="form-label small fw-semibold text-body mb-1">Jenis Kelamin</label>
+                        <select id="filter-gender" onchange="filterClientData()" class="form-select form-select-sm">
+                            <option value="ALL">Semua Gender</option>
+                            <option value="M">Laki-Laki (M)</option>
+                            <option value="F">Perempuan (F)</option>
+                        </select>
+                    </div>
+
+                    <!-- Pengurutan Kolom -->
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <label for="sort-select" class="form-label small fw-semibold text-body mb-1">Urutkan Data</label>
+                        <select id="sort-select" onchange="changeSorting(this.value)" class="form-select form-select-sm">
+                            <option value="skor_desc">Skor Tertinggi (100 &rarr; 0)</option>
+                            <option value="skor_asc">Skor Terendah (0 &rarr; 100)</option>
+                            <option value="nama_asc">Nama Peserta (A &rarr; Z)</option>
+                            <option value="nama_desc">Nama Peserta (Z &rarr; A)</option>
+                            <option value="id_asc">Nomor Ujian (Ascending)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mode 1: Table Container (Sortable Headers) -->
+            <div class="table-responsive" id="container-table-view">
+                <table class="table table-custom align-middle mb-0" style="font-size: 0.84rem;">
+                    <thead>
+                        <tr>
+                            <th class="ps-3 text-center sortable-th" style="width: 50px;" onclick="sortByHeader('id')" title="Klik untuk mengurutkan no urut">
+                                No <span id="sort-icon-id" class="sort-icon"><i class="bi bi-arrow-down-up"></i></span>
+                            </th>
+                            <th class="sortable-th" style="min-width: 170px;" onclick="sortByHeader('no_ujian')" title="Klik untuk mengurutkan no ujian">
+                                No Ujian <span id="sort-icon-no_ujian" class="sort-icon"><i class="bi bi-arrow-down-up"></i></span>
+                            </th>
+                            <th class="sortable-th" style="min-width: 180px;" onclick="sortByHeader('nama')" title="Klik untuk mengurutkan nama">
+                                Nama Peserta <span id="sort-icon-nama" class="sort-icon"><i class="bi bi-arrow-down-up"></i></span>
+                            </th>
+                            <th class="text-center sortable-th" style="width: 75px;" onclick="sortByHeader('gender')" title="Klik untuk mengurutkan gender">
+                                Gender <span id="sort-icon-gender" class="sort-icon"><i class="bi bi-arrow-down-up"></i></span>
+                            </th>
+                            <th class="sortable-th" style="min-width: 100px;" onclick="sortByHeader('lokasi')" title="Klik untuk mengurutkan lokasi">
+                                Lokasi <span id="sort-icon-lokasi" class="sort-icon"><i class="bi bi-arrow-down-up"></i></span>
+                            </th>
+                            <th class="sortable-th" style="min-width: 110px;" onclick="sortByHeader('tanggal')" title="Klik untuk mengurutkan tanggal ujian">
+                                Tgl Ujian <span id="sort-icon-tanggal" class="sort-icon"><i class="bi bi-arrow-down-up"></i></span>
+                            </th>
+                            <th class="text-center sortable-th" style="width: 95px;" onclick="sortByHeader('membaca')" title="Klik untuk mengurutkan skor membaca">
+                                Membaca <span id="sort-icon-membaca" class="sort-icon"><i class="bi bi-arrow-down-up"></i></span>
+                            </th>
+                            <th class="text-center sortable-th" style="width: 95px;" onclick="sortByHeader('mendengar')" title="Klik untuk mengurutkan skor mendengar">
+                                Mendengar <span id="sort-icon-mendengar" class="sort-icon"><i class="bi bi-arrow-down-up"></i></span>
+                            </th>
+                            <th class="text-center sortable-th" style="width: 105px;" onclick="sortByHeader('total')" title="Klik untuk mengurutkan total skor">
+                                Total Skor <span id="sort-icon-total" class="sort-icon active"><i class="bi bi-sort-down"></i></span>
+                            </th>
+                            <th class="text-center pe-3 sortable-th" style="width: 130px;" onclick="sortByHeader('status')" title="Klik untuk mengurutkan status kelulusan">
+                                Status <span id="sort-icon-status" class="sort-icon"><i class="bi bi-arrow-down-up"></i></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mode 2: Card Grid Container (Alternatif Tampilan Enak Dilihat) -->
+            <div id="container-card-view" class="p-3 d-none">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3" id="cards-body">
+                </div>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="card-footer bg-body-tertiary d-flex flex-wrap justify-content-between align-items-center gap-2 py-2.5">
+                <div class="d-flex align-items-center gap-2 small text-secondary">
+                    <span>Tampilkan:</span>
+                    <select id="limit-select" onchange="changeLimit(this.value)" class="form-select form-select-sm py-0 px-2" style="width: auto;">
+                        <option value="25">25</option>
+                        <option value="50" selected>50</option>
+                        <option value="100">100</option>
+                        <option value="250">250</option>
+                    </select>
+                    <span>| Halaman <strong id="page-current" class="text-body font-mono">1</strong> dari <strong id="page-total" class="text-body font-mono">1</strong></span>
+                    <span>(<span id="total-filtered" class="fw-semibold text-primary font-mono">0</span> data)</span>
+                </div>
+
+                <div class="btn-group btn-group-sm" role="group">
+                    <button id="btn-first" onclick="goToPage(1)" class="btn btn-outline-secondary">
+                        <i class="bi bi-chevron-double-left"></i> Awal
+                    </button>
+                    <button id="btn-prev" onclick="prevPage()" class="btn btn-outline-secondary">
+                        <i class="bi bi-chevron-left"></i> Sebelumnya
+                    </button>
+                    <button id="btn-next" onclick="nextPage()" class="btn btn-outline-secondary">
+                        Berikutnya <i class="bi bi-chevron-right"></i>
+                    </button>
+                    <button id="btn-last" onclick="goToLastPage()" class="btn btn-outline-secondary">
+                        Akhir <i class="bi bi-chevron-double-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Publik Peserta (Giscus - GitHub Discussions) -->
+        <div class="card shadow-sm mt-4" id="section-diskusi">
+            <div class="card-header bg-body-tertiary d-flex align-items-center gap-2">
+                <i class="bi bi-chat-dots-fill text-primary"></i>
+                <span class="fw-bold">Diskusi Publik Peserta</span>
+                <span class="badge bg-primary-subtle text-primary border ms-2">Chat untuk siapapun</span>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info small py-2 mb-3">
+                    <i class="bi bi-info-circle me-1"></i> Chat publik untuk semua peserta. Tanya jawab seputar hasil, Skill Test, dan info EPS-TOPIK. Jaga etika, jangan share data pribadi.
+                </div>
+                <!-- Giscus akan load di sini setelah repo cekepstopik di-push -->
+                <div id="giscus-container">
+                    <div class="text-center text-secondary small py-4 border rounded bg-body-tertiary">
+                        <div class="spinner-border spinner-border-sm me-2"></div>Memuat diskusi...
+                        <div class="mt-1" style="font-size:0.7rem">Jika belum muncul, pastikan repo <code>cekepstopik</code> sudah di-push & Discussions aktif</div>
+                    </div>
+                </div>
+                <script>
+                (function(){
+                    // GANTI username/repo sesuai GitHub kamu. Contoh: backone01/cekepstopik
+                    // Cara dapat repoId/categoryId: buka https://giscus.app -> isi repo -> copy script
+                    const GISCUS_REPO = 'backone01/cekepstopik';
+                    const GISCUS_REPO_ID = 'REPLACE_ME';
+                    const GISCUS_CATEGORY_ID = 'REPLACE_ME';
+                    // Jika belum diisi, tampilkan placeholder
+                    if(GISCUS_REPO_ID==='REPLACE_ME'){
+                        document.getElementById('giscus-container').innerHTML = '<div class=\"alert alert-warning small mb-0\"><i class=\"bi bi-exclamation-triangle me-1\"></i> Chat akan aktif setelah push ke GitHub.<br>1. Push <code>docs/</code> ke <code>'+GISCUS_REPO+'</code><br>2. Aktifkan <code>Settings > General > Discussions</code><br>3. Buka <a href=\"https://giscus.app\" target=\"_blank\">giscus.app</a> isi repo -> copy repoId/categoryId -> ganti di file <code>docs/index.html</code></div>';
+                        return;
+                    }
+                    const s=document.createElement('script');
+                    s.src='https://giscus.app/client.js';
+                    s.setAttribute('data-repo',GISCUS_REPO);
+                    s.setAttribute('data-repo-id',GISCUS_REPO_ID);
+                    s.setAttribute('data-category','General');
+                    s.setAttribute('data-category-id',GISCUS_CATEGORY_ID);
+                    s.setAttribute('data-mapping','pathname');
+                    s.setAttribute('data-strict','0');
+                    s.setAttribute('data-reactions-enabled','1');
+                    s.setAttribute('data-emit-metadata','0');
+                    s.setAttribute('data-input-position','bottom');
+                    s.setAttribute('data-theme','preferred_color_scheme');
+                    s.setAttribute('data-lang','id');
+                    s.setAttribute('crossorigin','anonymous');
+                    s.async=true;
+                    document.getElementById('giscus-container').appendChild(s);
+                })();
+                </script>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-secondary small py-4 mt-4 border-top">
+            EPS-TOPIK UBT 2026 Examination Analytics Dashboard &bull; Sektor Manufaktur Gelombang 2026
+        </footer>
+
+    </div>
+
+    <!-- Bootstrap 5.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Inline data - load di awal biar pencarian instan (file:// & https://) -->
+    <script src="analytics_inline.js"></script>
+    <script src="peserta_data_inline.js"></script>
+    <script src="peserta_lookup_inline.js"></script>
+
+    <script>
+        let allPesertaData = [];
+        let filteredData = [];
+        let currentPage = 1;
+        let currentLimit = 50;
+        let totalPages = 1;
+        let currentSort = 'skor_desc';
+
+        // Chart Instances
+        let chartKelulusanInstance = null;
+        let chartSkorDistribusiInstance = null;
+        let chartLokasiInstance = null;
+
+        // Dark/Light Theme Handler
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-bs-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-bs-theme', next);
+            localStorage.setItem('eps_theme', next);
+            updateThemeIcon(next);
+            loadAnalytics();
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeIcon');
+            if (icon) {
+                icon.className = theme === 'dark' ? 'bi bi-sun-fill text-warning' : 'bi bi-moon-stars';
+            }
+        }
+
+        const savedTheme = localStorage.getItem('eps_theme') || 'light';
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        // Load static analytics JSON - supports file:// via inline JS
+        async function loadAnalytics() {
+            if (typeof __ANALYTICS_DATA__ !== 'undefined' && __ANALYTICS_DATA__) {
+                renderAnalytics(__ANALYTICS_DATA__);
+                return;
+            }
+            try {
+                const res = await fetch('analytics.json');
+                const data = await res.json();
+                renderAnalytics(data);
+            } catch (e) {
+                console.error('Error load analytics.json:', e);
+            }
+        }
+
+        function hideSkeleton() {
+            const sk = document.getElementById('skeleton-loader');
+            const kp = document.getElementById('kpi-cards');
+            if (sk) sk.style.display='none';
+            if (kp) kp.style.display='';
+        }
+        function renderAnalytics(data) {
+            hideSkeleton();
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+            const gridColor = isDark ? '#1e293b' : '#e2e8f0';
+
+            const summary = data.summary;
+            const scoreDist = data.score_distribution;
+            const locationStats = data.location_stats;
+            const exactScores = data.exact_scores;
+            const topPerformers = data.top_performers;
+
+            // Update Summary KPI
+            document.getElementById('stat-total').innerText = summary.total.toLocaleString();
+            document.getElementById('stat-lulus').innerText = summary.lulus.toLocaleString();
+            document.getElementById('stat-tidaklulus').innerText = summary.tidak_lulus_murni.toLocaleString();
+            document.getElementById('stat-tidakhadir').innerText = summary.tidak_hadir.toLocaleString();
+            document.getElementById('stat-lulus-pct').innerText = `${summary.persentase_lulus}% dari total pendaftar`;
+            document.getElementById('stat-passing-rate').innerText = `${summary.passing_rate_hadir}%`;
+
+            const hadirTotal = summary.lulus + summary.tidak_lulus_murni;
+            document.getElementById('stat-peserta-hadir').innerText = `${hadirTotal.toLocaleString()} peserta hadir ujian`;
+
+            document.getElementById('legend-lulus').innerText = summary.lulus.toLocaleString();
+            document.getElementById('legend-tidaklulus').innerText = summary.tidak_lulus_murni.toLocaleString();
+            document.getElementById('legend-tidakhadir').innerText = summary.tidak_hadir.toLocaleString();
+
+            // 1. Doughnut Chart Kelulusan
+            const ctx1 = document.getElementById('chartKelulusan').getContext('2d');
+            if (chartKelulusanInstance) {
+                chartKelulusanInstance.data.datasets[0].data = [summary.lulus, summary.tidak_lulus_murni, summary.tidak_hadir];
+                chartKelulusanInstance.update();
+            } else {
+                chartKelulusanInstance = new Chart(ctx1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Lulus', 'Tidak Lulus', 'Tidak Hadir'],
+                        datasets: [{
+                            data: [summary.lulus, summary.tidak_lulus_murni, summary.tidak_hadir],
+                            backgroundColor: ['#198754', '#dc3545', '#ffc107'],
+                            borderWidth: 1,
+                            borderColor: isDark ? '#0f172a' : '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        cutout: '70%'
+                    }
+                });
+            }
+
+            // 2. Bar Chart Frekuensi Lengkap Seluruh Nilai EPS-TOPIK (10.0 s/d 100.0)
+            const ctx2 = document.getElementById('chartSkorDistribusi').getContext('2d');
+            
+            // Urutkan seluruh nilai dari skor terendah ke tertinggi (10.0 -> 100.0)
+            const allScoresSorted = exactScores
+                .slice()
+                .sort((a, b) => parseFloat(a.skor) - parseFloat(b.skor));
+
+            const scoreLabels = allScoresSorted.map(d => parseFloat(d.skor).toFixed(1));
+            const scoreValues = allScoresSorted.map(d => d.total);
+            const scoreColors = allScoresSorted.map(d => {
+                const s = parseFloat(d.skor);
+                if (s >= 97.5) return '#16a34a'; // Lulus (Hijau)
+                if (s >= 90.0) return '#f59e0b'; // Passing Tinggi (Kuning)
+                return '#94a3b8'; // Di bawah standar (Abu-abu Slate)
+            });
+
+            if (chartSkorDistribusiInstance) {
+                chartSkorDistribusiInstance.data.labels = scoreLabels;
+                chartSkorDistribusiInstance.data.datasets[0].data = scoreValues;
+                chartSkorDistribusiInstance.data.datasets[0].backgroundColor = scoreColors;
+                chartSkorDistribusiInstance.options.scales.x.ticks.color = textColor;
+                chartSkorDistribusiInstance.options.scales.y.ticks.color = textColor;
+                chartSkorDistribusiInstance.options.scales.y.grid.color = gridColor;
+                chartSkorDistribusiInstance.update();
+            } else {
+                chartSkorDistribusiInstance = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: scoreLabels,
+                        datasets: [{
+                            label: 'Jumlah Peserta',
+                            data: scoreValues,
+                            backgroundColor: scoreColors,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    title: (ctx) => `Nilai Ujian: ${ctx[0].label} Poin`,
+                                    label: (ctx) => {
+                                        const skorNum = parseFloat(ctx.label);
+                                        const status = skorNum >= 97.5 ? 'LULUS (Skill Test)' : 'TIDAK LULUS';
+                                        return ` Frekuensi: ${ctx.raw.toLocaleString()} Orang (${status})`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { 
+                                ticks: { color: textColor, font: { size: 9, weight: 'bold' } }, 
+                                grid: { display: false } 
+                            },
+                            y: { 
+                                ticks: { color: textColor, font: { size: 11 } }, 
+                                grid: { color: gridColor } 
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 3. Stacked Bar Lokasi
+            const ctx3 = document.getElementById('chartLokasi').getContext('2d');
+            const locLabels = locationStats.map(l => l.lokasi);
+            const locLulus = locationStats.map(l => l.lulus);
+            const locGagal = locationStats.map(l => l.tidak_lulus);
+            const locAbsen = locationStats.map(l => l.tidak_hadir);
+
+            if (chartLokasiInstance) {
+                chartLokasiInstance.data.labels = locLabels;
+                chartLokasiInstance.data.datasets[0].data = locLulus;
+                chartLokasiInstance.data.datasets[1].data = locGagal;
+                chartLokasiInstance.data.datasets[2].data = locAbsen;
+                chartLokasiInstance.options.scales.x.ticks.color = textColor;
+                chartLokasiInstance.options.scales.y.ticks.color = textColor;
+                chartLokasiInstance.options.scales.x.grid.color = gridColor;
+                chartLokasiInstance.update();
+            } else {
+                chartLokasiInstance = new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: locLabels,
+                        datasets: [
+                            { label: 'Lulus', data: locLulus, backgroundColor: '#198754' },
+                            { label: 'Tidak Lulus', data: locGagal, backgroundColor: '#dc3545' },
+                            { label: 'Tidak Hadir', data: locAbsen, backgroundColor: '#ffc107' }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { stacked: true, ticks: { color: textColor, font: { size: 10 } }, grid: { color: gridColor } },
+                            y: { stacked: true, ticks: { color: textColor, font: { size: 10 } }, grid: { display: false } }
+                        },
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: textColor, font: { size: 10 } } }
+                        }
+                    }
+                });
+            }
+
+            // Summary List Lokasi (Mini City Cards yang Rapi di HP)
+            const locList = document.getElementById('lokasi-summary-list');
+            if (locList) {
+                locList.innerHTML = locationStats.map(l => {
+                    const passRate = l.total > 0 ? ((l.lulus / l.total) * 100).toFixed(1) : 0;
+                    return `
+                        <div class="col-12 col-sm-4">
+                            <div class="p-2 rounded border bg-body h-100 d-flex flex-column justify-content-between">
+                                <div class="d-flex justify-content-between align-items-center mb-1.5">
+                                    <span class="fw-bold text-body small">${l.lokasi}</span>
+                                    <span class="badge bg-primary-subtle text-primary border font-mono" style="font-size: 0.7rem;">${passRate}% Lulus</span>
+                                </div>
+                                <div class="row g-1 text-center font-mono" style="font-size: 0.72rem;">
+                                    <div class="col-4">
+                                        <div class="py-1 px-0.5 rounded bg-body-tertiary border">
+                                            <div class="text-secondary" style="font-size: 0.62rem;">TOTAL</div>
+                                            <div class="fw-bold text-body">${l.total.toLocaleString()}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="py-1 px-0.5 rounded bg-success-subtle border border-success-subtle">
+                                            <div class="text-success-emphasis" style="font-size: 0.62rem;">LULUS</div>
+                                            <div class="fw-bold text-success">${l.lulus.toLocaleString()}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="py-1 px-0.5 rounded bg-warning-subtle border border-warning-subtle">
+                                            <div class="text-warning-emphasis" style="font-size: 0.62rem;">ABSEN</div>
+                                            <div class="fw-bold text-warning-emphasis">${l.tidak_hadir.toLocaleString()}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Footer Baris Nilai di Bawah Grafik Distribusi (Nilai Bersih Tanpa Memaksa Filter)
+            const chartScoreValuesEl = document.getElementById('chart-score-values');
+            if (chartScoreValuesEl) {
+                // Ambil nilai-nilai teratas yang paling dicari (100 s/d 75)
+                const keyScores = exactScores.filter(d => parseFloat(d.skor) >= 77.5);
+                chartScoreValuesEl.innerHTML = keyScores.map(d => {
+                    const skor = parseFloat(d.skor);
+                    const isLulus = skor >= 97.5;
+                    const badgeBg = isLulus ? 'bg-success text-white' : (skor >= 90 ? 'bg-warning-subtle text-warning-emphasis border border-warning-subtle' : 'bg-body-secondary text-secondary border');
+                    return `
+                        <div class="px-2 py-1 rounded ${badgeBg} small" title="Skor ${skor.toFixed(1)}: ${d.total} Peserta">
+                            <strong>${skor.toFixed(1)}</strong>: <span class="fw-bold">${d.total.toLocaleString()}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Rincian Frekuensi Nilai: Aligned Grid Rapi, Lurus, Rata dengan Satuan "Orang" (Hanya Informasi Statistik)
+            const pillsContainer = document.getElementById('exact-score-pills');
+            if (pillsContainer) {
+                pillsContainer.className = 'score-pill-grid';
+                pillsContainer.innerHTML = exactScores.map(row => {
+                    const skor = parseFloat(row.skor);
+                    const isLulus = skor >= 97.5;
+                    let pillClass = 'pill-regular';
+                    let badgeClass = 'bg-body-secondary text-body';
+                    if (isLulus) {
+                        pillClass = 'pill-lulus';
+                        badgeClass = 'bg-success text-white';
+                    } else if (skor >= 90.0) {
+                        pillClass = 'pill-high';
+                        badgeClass = 'bg-warning-subtle text-warning-emphasis border border-warning-subtle';
+                    }
+
+                    return `
+                        <div class="score-pill ${pillClass}" title="Nilai ${skor.toFixed(1)}: ${row.total.toLocaleString()} Orang (Semarang: ${row.smg}, Jakarta: ${row.jkt}, Surabaya: ${row.sby})">
+                            <span class="fw-bold">${skor.toFixed(1)}</span>
+                            <span class="badge ${badgeClass} py-1 px-1.5 font-mono" style="font-size: 0.72rem;">
+                                ${row.total.toLocaleString()} <span style="font-weight: normal; font-size: 0.65rem;">orang</span>
+                            </span>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Pure JavaScript SHA-256 implementation (works in non-secure HTTP / LAN / mobile contexts)
+        function pureSha256(ascii) {
+            function rightRotate(value, amount) {
+                return (value >>> amount) | (value << (32 - amount));
+            }
+            var mathPow = Math.pow;
+            var maxWord = mathPow(2, 32);
+            var lengthProperty = 'length';
+            var i, j;
+            var result = '';
+            var words = [];
+            var asciiBitLength = ascii[lengthProperty] * 8;
+            var hash = [
+                0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+                0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+            ];
+            var k = [
+                0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+                0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+                0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+                0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+                0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+                0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+                0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+                0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+            ];
+            ascii += '\x80';
+            while (ascii[lengthProperty] % 64 - 56) ascii += '\x00';
+            for (i = 0; i < ascii[lengthProperty]; i++) {
+                j = ascii.charCodeAt(i);
+                words[i >> 2] |= j << ((3 - i % 4) * 8);
+            }
+            words[words[lengthProperty]] = ((asciiBitLength / maxWord) | 0);
+            words[words[lengthProperty]] = (asciiBitLength) | 0;
+            for (j = 0; j < words[lengthProperty];) {
+                var w = words.slice(j, j += 16);
+                var oldHash = hash.slice(0);
+                for (i = 0; i < 64; i++) {
+                    var w15 = w[i - 15], w2 = w[i - 2];
+                    var a = hash[0], e = hash[4];
+                    var s1 = rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25);
+                    var ch = (e & hash[5]) ^ ((~e) & hash[6]);
+                    var temp1 = (hash[7] + s1 + ch + k[i] + (w[i] = (i < 16) ? w[i] : (
+                        (w[i - 16] + 
+                        (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) + 
+                        w[i - 7] + 
+                        (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) | 0
+                    ))) | 0;
+                    var s0 = rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22);
+                    var maj = (a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]);
+                    var temp2 = (s0 + maj) | 0;
+                    hash = [(temp1 + temp2) | 0, hash[0], hash[1], hash[2], (hash[3] + temp1) | 0, hash[4], hash[5], hash[6]];
+                }
+                for (i = 0; i < 8; i++) {
+                    hash[i] = (hash[i] + oldHash[i]) | 0;
+                }
+            }
+            for (i = 0; i < 8; i++) {
+                for (j = 3; j >= 0; j--) {
+                    var b = (hash[i] >> (j * 8)) & 255;
+                    result += ((b < 16) ? '0' : '') + b.toString(16);
+                }
+            }
+            return result;
+        }
+
+        // SHA-256 Client-Side Hasher for Zero-Knowledge Candidate Lookup
+        async function sha256Hex16(str) {
+            const cleanStr = str.trim().toUpperCase();
+            if (window.crypto && window.crypto.subtle && window.crypto.subtle.digest) {
+                try {
+                    const encoder = new TextEncoder();
+                    const data = encoder.encode(cleanStr);
+                    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                    const hashArray = Array.from(new Uint8Array(hashBuffer));
+                    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                    return hashHex.substring(0, 16);
+                } catch (e) {
+                    console.warn('crypto.subtle failed, falling back to pureSha256:', e);
+                }
+            }
+            // Pure JS fallback untuk lingkungan non-HTTPS (seperti IP LAN hp: http://192.168.x.x:5000)
+            return pureSha256(cleanStr).substring(0, 16);
+        }
+
+        let lookupMap = null;
+        let isLoadingLookup = false;
+
+        async function getLookupMap() {
+            if (lookupMap) return lookupMap;
+            if (typeof __LOOKUP_DATA__ !== 'undefined' && __LOOKUP_DATA__) {
+                lookupMap = __LOOKUP_DATA__;
+                return lookupMap;
+            }
+            if (isLoadingLookup) {
+                while (isLoadingLookup) await new Promise(r => setTimeout(r, 100));
+                return lookupMap;
+            }
+            isLoadingLookup = true;
+            try {
+                const res = await fetch('peserta_lookup.json');
+                lookupMap = await res.json();
+            } catch (e) {
+                console.error('Gagal memuat peserta_lookup.json:', e);
+            } finally { isLoadingLookup = false; }
+            return lookupMap;
+        }
+
+        // Candidate Direct Check Search
+        async function searchCandidate(e) {
+            e.preventDefault();
+            const input = document.getElementById('check-input').value.trim();
+            const box = document.getElementById('check-result-box');
+            if (!input) return;
+
+            box.innerHTML = `
+                <div class="d-flex align-items-center justify-content-center py-2 text-secondary">
+                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                    <span>Memeriksa database...</span>
+                </div>
+            `;
+
+            try {
+                const hashKey = await sha256Hex16(input);
+                const map = await getLookupMap();
+                let found = map ? map[hashKey] : null;
+
+                // Fallback pencarian di allPesertaData jika input kebetulan nomor masked atau nama
+                if (!found && allPesertaData && allPesertaData.length > 0) {
+                    const queryUpper = input.toUpperCase();
+                    const fallbackItem = allPesertaData.find(item => {
+                        return item[0].toUpperCase() === queryUpper || item[1].toUpperCase() === queryUpper;
+                    });
+                    if (fallbackItem) {
+                        // fallbackItem: [0:full_no, 1:nama, 2:lokasi, 3:tgl, 4:membaca, 5:mendengar, 6:total, 7:status, 8:gender]
+                        found = [fallbackItem[0], fallbackItem[1], fallbackItem[2], fallbackItem[3], fallbackItem[4], fallbackItem[5], fallbackItem[6], fallbackItem[7], '97.5'];
+                    }
+                }
+
+                if (found) {
+                    // found: [0:masked_no, 1:masked_nama, 2:lokasi, 3:tgl, 4:membaca, 5:mendengar, 6:total, 7:status, 8:standar]
+                    const isLulus = found[7] === 'LULUS';
+                    const badge = isLulus 
+                        ? '<span class="badge bg-success fs-7">LULUS</span>' 
+                        : (found[6] ? '<span class="badge bg-danger fs-7">TIDAK LULUS</span>' : '<span class="badge bg-warning text-dark fs-7">TIDAK HADIR / NIHIL</span>');
+
+                    let formattedTgl = found[3] || '-';
+                    if (formattedTgl && formattedTgl.length === 8) {
+                        formattedTgl = `${formattedTgl.substring(0,4)}-${formattedTgl.substring(4,6)}-${formattedTgl.substring(6,8)}`;
+                    }
+
+                    // Simpan untuk share card
+                    window.__LAST_FOUND__ = found;
+                    window.__SHOW_FULL_NO__ = false;
+                    const maskedNo = maskNoUjian(found[0]);
+                    box.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold text-primary font-mono d-flex align-items-center gap-1">
+                                <span id="result-no">${maskedNo}</span>
+                                <button class="btn btn-sm btn-outline-secondary py-0 px-1" style="font-size:0.75rem;line-height:1" onclick="toggleResultNo()" title="Lihat/sembunyikan nomor"><i id="eye-icon" class="bi bi-eye"></i></button>
+                            </span>
+                            ${badge}
+                        </div>
+                        <div class="fw-semibold text-body fs-6">${found[1]}</div>
+                        <div class="small text-secondary d-flex flex-wrap gap-2 mt-1">
+                            <span><i class="bi bi-geo-alt"></i> ${found[2]}</span>
+                            <span>&bull; Tanggal: ${formattedTgl}</span>
+                            <span>&bull; Membaca: <strong>${found[4] || '-'}</strong></span>
+                            <span>&bull; Mendengar: <strong>${found[5] || '-'}</strong></span>
+                            <span>&bull; Total: <strong class="${isLulus ? 'text-success' : 'text-body'}">${found[6] || '-'}</strong></span>
+                        </div>
+                        <div class="d-flex gap-2 mt-3">
+                            <button class="btn btn-sm btn-primary flex-fill" onclick="shareResultCard()"><i class="bi bi-share-fill me-1"></i> Bagikan Gambar</button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="downloadResultCard()"><i class="bi bi-download me-1"></i> Unduh PNG</button>
+                        </div>
+                        <div class="small text-secondary mt-2" style="font-size:0.7rem"><i class="bi bi-shield-lock me-1"></i>Data pribadi terlindungi. Tabel publik tetap disamarkan.</div>
+                    `;
+                } else {
+                    box.innerHTML = `
+                        <div class="text-danger fw-semibold"><i class="bi bi-exclamation-triangle"></i> Nomor Ujian Tidak Ditemukan</div>
+                        <div class="small text-secondary mt-0.5">Pastikan 16 digit (0122026C...) atau 8 digit nomor ujian sudah benar.</div>
+                    `;
+                }
+            } catch (err) {
+                console.error('Error saat pencarian:', err);
+                box.innerHTML = `
+                    <div class="text-danger fw-semibold"><i class="bi bi-x-circle"></i> Terjadi kesalahan saat memproses data</div>
+                `;
+            }
+        }
+
+        // Load compact peserta data for client table - supports file:// via inline JS
+        async function loadPesertaData() {
+            if (typeof __PESERTA_DATA__ !== 'undefined' && __PESERTA_DATA__) {
+                allPesertaData = __PESERTA_DATA__;
+                filterClientData();
+                return;
+            }
+            try {
+                const res = await fetch('peserta_data.json');
+                allPesertaData = await res.json();
+                filterClientData();
+            } catch (e) {
+                console.error('Error load peserta_data.json:', e);
+            }
+        }
+
+        function filterClientData() {
+            const query = document.getElementById('search-input').value.trim().toLowerCase();
+            const status = document.getElementById('filter-status').value;
+            const lokasi = document.getElementById('filter-lokasi').value;
+            const gender = document.getElementById('filter-gender').value;
+
+            filteredData = allPesertaData.filter(row => {
+                // row: [0:full_no, 1:nama, 2:lokasi, 3:tgl, 4:membaca, 5:mendengar, 6:total, 7:status, 8:gender]
+                if (query) {
+                    const matchNo = row[0].toLowerCase().includes(query);
+                    const matchNama = row[1].toLowerCase().includes(query);
+                    if (!matchNo && !matchNama) return false;
+                }
+
+                const hasScore = Boolean(row[6] && row[6] !== '-' && row[6].trim() !== '');
+
+                if (status !== 'ALL') {
+                    if (status === 'LULUS' && row[7] !== 'LULUS') return false;
+                    if (status === 'TIDAK LULUS' && (row[7] !== 'TIDAK LULUS' || !hasScore)) return false;
+                    if (status === 'TIDAK HADIR' && (row[7] !== 'TIDAK LULUS' || hasScore)) return false;
+                }
+
+                if (lokasi !== 'ALL' && row[2] !== lokasi) return false;
+                if (gender !== 'ALL' && row[8] !== gender) return false;
+
+                return true;
+            });
+
+            // Sorting
+            sortFilteredData();
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        // State View & Sorting
+        let currentViewMode = 'table';
+        let currentSortCol = 'total';
+        let currentSortDir = 'desc';
+
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            const btnTable = document.getElementById('btn-view-table');
+            const btnCards = document.getElementById('btn-view-cards');
+            const tableContainer = document.getElementById('container-table-view');
+            const cardContainer = document.getElementById('container-card-view');
+
+            if (mode === 'table') {
+                btnTable.className = 'btn btn-primary btn-sm px-2.5';
+                btnCards.className = 'btn btn-outline-primary btn-sm px-2.5';
+                tableContainer.classList.remove('d-none');
+                cardContainer.classList.add('d-none');
+            } else {
+                btnTable.className = 'btn btn-outline-primary btn-sm px-2.5';
+                btnCards.className = 'btn btn-primary btn-sm px-2.5';
+                tableContainer.classList.add('d-none');
+                cardContainer.classList.remove('d-none');
+            }
+        }
+
+        function sortByHeader(column) {
+            if (currentSortCol === column) {
+                currentSortDir = (currentSortDir === 'asc' ? 'desc' : 'asc');
+            } else {
+                currentSortCol = column;
+                currentSortDir = (['total', 'membaca', 'mendengar'].includes(column) ? 'desc' : 'asc');
+            }
+
+            // Sinkronkan ke dropdown urutkan jika relevan
+            const sortSelect = document.getElementById('sort-select');
+            if (column === 'total') {
+                sortSelect.value = currentSortDir === 'desc' ? 'skor_desc' : 'skor_asc';
+            } else if (column === 'nama') {
+                sortSelect.value = currentSortDir === 'desc' ? 'nama_desc' : 'nama_asc';
+            } else if (column === 'no_ujian') {
+                sortSelect.value = 'id_asc';
+            }
+
+            updateSortIcons();
+            sortFilteredData();
+            currentPage = 1;
+            renderTable();
+        }
+
+        function updateSortIcons() {
+            const columns = ['id', 'no_ujian', 'nama', 'gender', 'lokasi', 'tanggal', 'membaca', 'mendengar', 'total', 'status'];
+            columns.forEach(col => {
+                const iconEl = document.getElementById(`sort-icon-${col}`);
+                if (!iconEl) return;
+                if (col === currentSortCol) {
+                    iconEl.className = 'sort-icon active';
+                    iconEl.innerHTML = currentSortDir === 'asc' 
+                        ? '<i class="bi bi-sort-up"></i>' 
+                        : '<i class="bi bi-sort-down"></i>';
+                } else {
+                    iconEl.className = 'sort-icon';
+                    iconEl.innerHTML = '<i class="bi bi-arrow-down-up"></i>';
+                }
+            });
+        }
+
+        function sortFilteredData() {
+            const dir = currentSortDir === 'asc' ? 1 : -1;
+            
+            if (currentSortCol === 'total') {
+                filteredData.sort((a, b) => ((parseFloat(a[6]) || 0) - (parseFloat(b[6]) || 0)) * dir);
+            } else if (currentSortCol === 'membaca') {
+                filteredData.sort((a, b) => ((parseFloat(a[4]) || 0) - (parseFloat(b[4]) || 0)) * dir);
+            } else if (currentSortCol === 'mendengar') {
+                filteredData.sort((a, b) => ((parseFloat(a[5]) || 0) - (parseFloat(b[5]) || 0)) * dir);
+            } else if (currentSortCol === 'nama') {
+                filteredData.sort((a, b) => a[1].localeCompare(b[1]) * dir);
+            } else if (currentSortCol === 'no_ujian') {
+                filteredData.sort((a, b) => a[0].localeCompare(b[0]) * dir);
+            } else if (currentSortCol === 'gender') {
+                filteredData.sort((a, b) => (a[8] || '').localeCompare(b[8] || '') * dir);
+            } else if (currentSortCol === 'lokasi') {
+                filteredData.sort((a, b) => a[2].localeCompare(b[2]) * dir);
+            } else if (currentSortCol === 'tanggal') {
+                filteredData.sort((a, b) => (a[3] || '').localeCompare(b[3] || '') * dir);
+            } else if (currentSortCol === 'status') {
+                filteredData.sort((a, b) => a[7].localeCompare(b[7]) * dir);
+            } else if (currentSortCol === 'id') {
+                filteredData.sort((a, b) => a[0].localeCompare(b[0]) * dir);
+            }
+        }
+
+        function changeSorting(val) {
+            if (val === 'skor_desc') {
+                currentSortCol = 'total'; currentSortDir = 'desc';
+            } else if (val === 'skor_asc') {
+                currentSortCol = 'total'; currentSortDir = 'asc';
+            } else if (val === 'nama_asc') {
+                currentSortCol = 'nama'; currentSortDir = 'asc';
+            } else if (val === 'nama_desc') {
+                currentSortCol = 'nama'; currentSortDir = 'desc';
+            } else if (val === 'id_asc') {
+                currentSortCol = 'no_ujian'; currentSortDir = 'asc';
+            }
+            updateSortIcons();
+            sortFilteredData();
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Sensor Privasi Publik (Zero Leakage Privacy)
+        function maskNoUjian(no) {
+            if (!no || no.length < 8) return no || '-';
+            if (no.length >= 16) {
+                // Contoh: 0122026C50803283 -> 0122026C50****83
+                return no.substring(0, 10) + '****' + no.substring(14);
+            }
+            // Contoh 8 digit: 50803283 -> 50****83
+            return no.substring(0, 2) + '****' + no.substring(no.length - 2);
+        }
+
+        function maskNama(nama) {
+            if (!nama) return '-';
+            return nama.trim().split(/\s+/).map(word => {
+                if (word.length <= 2) return word[0] + '*';
+                return word[0] + '*'.repeat(word.length - 2) + word[word.length - 1];
+            }).join(' ');
+        }
+
+        function renderTable() {
+            const total = filteredData.length;
+            totalPages = Math.max(1, Math.ceil(total / currentLimit));
+
+            document.getElementById('table-count').innerText = total.toLocaleString();
+            document.getElementById('total-filtered').innerText = total.toLocaleString();
+            document.getElementById('page-current').innerText = currentPage;
+            document.getElementById('page-total').innerText = totalPages;
+
+            document.getElementById('btn-first').disabled = currentPage <= 1;
+            document.getElementById('btn-prev').disabled = currentPage <= 1;
+            document.getElementById('btn-next').disabled = currentPage >= totalPages;
+            document.getElementById('btn-last').disabled = currentPage >= totalPages;
+
+            const tbody = document.getElementById('table-body');
+            const cardsBody = document.getElementById('cards-body');
+            tbody.innerHTML = '';
+            if (cardsBody) cardsBody.innerHTML = '';
+
+            if (total === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="text-center py-5 text-secondary">
+                            <div class="fw-semibold text-body fs-6">Tidak ada data peserta yang cocok</div>
+                            <div class="small mt-1">Coba sesuaikan kata kunci atau kriteria filter Anda</div>
+                        </td>
+                    </tr>
+                `;
+                if (cardsBody) {
+                    cardsBody.innerHTML = `
+                        <div class="col-12 text-center py-5 text-secondary">
+                            <div class="fw-semibold text-body fs-6">Tidak ada data peserta yang cocok</div>
+                            <div class="small mt-1">Coba sesuaikan kata kunci atau kriteria filter Anda</div>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            const start = (currentPage - 1) * currentLimit;
+            const slice = filteredData.slice(start, start + currentLimit);
+
+            slice.forEach((r, idx) => {
+                const isLulus = r[7] === 'LULUS';
+                const hasScore = Boolean(r[6] && r[6] !== '-' && r[6].trim() !== '');
+                
+                let badge = '<span class="badge-status-lulus">LULUS</span>';
+                if (!isLulus) {
+                    badge = hasScore 
+                        ? '<span class="badge-status-gagal">TIDAK LULUS</span>' 
+                        : '<span class="badge-status-absen">TIDAK HADIR</span>';
+                }
+
+                let formattedTgl = r[3] || '-';
+                if (formattedTgl && formattedTgl.length === 8) {
+                    formattedTgl = `${formattedTgl.substring(0,4)}-${formattedTgl.substring(4,6)}-${formattedTgl.substring(6,8)}`;
+                }
+
+                const genderBadge = r[8] === 'F' 
+                    ? '<span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle fw-semibold px-2" style="font-size: 0.72rem;">P</span>'
+                    : '<span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle fw-semibold px-2" style="font-size: 0.72rem;">L</span>';
+
+                const totalSkor = r[6] || '-';
+                let skorCellHtml = `<span class="text-body fw-bold">${totalSkor}</span>`;
+                if (isLulus) {
+                    skorCellHtml = `<span class="badge bg-success text-white font-mono px-2 py-1 fs-7 fw-bold">${totalSkor}</span>`;
+                } else if (!hasScore) {
+                    skorCellHtml = `<span class="text-secondary">-</span>`;
+                }
+
+                // Sensor Privasi Tampilan
+                const maskedNo = maskNoUjian(r[0]);
+                const maskedName = maskNama(r[1]);
+
+                // 1. Render Baris Tabel dengan warna overlay transparan sesuai status
+                const tr = document.createElement('tr');
+                if (isLulus) {
+                    tr.className = 'row-lulus';
+                } else if (hasScore) {
+                    tr.className = 'row-gagal';
+                } else {
+                    tr.className = 'row-absen';
+                }
+                tr.innerHTML = `
+                    <td class="ps-3 text-center text-secondary font-mono small">${start + idx + 1}</td>
+                    <td class="fw-bold text-primary font-mono" title="Nomor ujian disamarkan untuk privasi">${maskedNo}</td>
+                    <td class="fw-semibold text-body" title="Nama peserta disamarkan untuk privasi">${maskedName}</td>
+                    <td class="text-center">${genderBadge}</td>
+                    <td><span class="badge bg-secondary-subtle text-secondary-emphasis border px-2 py-1">${r[2]}</span></td>
+                    <td class="text-body font-mono small">${formattedTgl}</td>
+                    <td class="text-center text-body font-mono fw-medium">${r[4] || '-'}</td>
+                    <td class="text-center text-body font-mono fw-medium">${r[5] || '-'}</td>
+                    <td class="text-center font-mono">${skorCellHtml}</td>
+                    <td class="text-center pe-3">${badge}</td>
+                `;
+                tbody.appendChild(tr);
+
+                // 2. Render Kartu Profil (Tampilan Alternatif Enak Dilihat)
+                if (cardsBody) {
+                    const colCard = document.createElement('div');
+                    colCard.className = 'col';
+                    colCard.innerHTML = `
+                        <div class="peserta-card p-3 h-100 d-flex flex-column justify-content-between shadow-sm">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold text-primary font-mono small" title="Nomor ujian disamarkan">${maskedNo}</span>
+                                    ${badge}
+                                </div>
+                                <h6 class="fw-bold text-body mb-1.5 fs-6" title="Nama disamarkan">${maskedName}</h6>
+                                <div class="small text-secondary d-flex flex-wrap align-items-center gap-2 mb-2">
+                                    <span><i class="bi bi-geo-alt text-primary"></i> ${r[2]}</span>
+                                    <span>&bull; ${genderBadge}</span>
+                                    <span>&bull; <i class="bi bi-calendar3"></i> ${formattedTgl}</span>
+                                </div>
+                            </div>
+                            <div class="pt-2 border-top d-flex justify-content-between align-items-end mt-2">
+                                <div class="small font-mono text-secondary">
+                                    <div>Membaca: <strong class="text-body">${r[4] || '-'}</strong> / 50</div>
+                                    <div>Mendengar: <strong class="text-body">${r[5] || '-'}</strong> / 50</div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="text-secondary small fw-medium" style="font-size: 0.68rem; letter-spacing: 0.04em;">TOTAL SKOR</div>
+                                    <div class="fs-4 font-mono fw-bold ${isLulus ? 'text-success' : 'text-body'} lh-1 mt-1">${totalSkor}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    cardsBody.appendChild(colCard);
+                }
+            });
+        }
+
+        function resetAllFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('filter-status').value = 'ALL';
+            document.getElementById('filter-lokasi').value = 'ALL';
+            document.getElementById('filter-gender').value = 'ALL';
+            document.getElementById('sort-select').value = 'skor_desc';
+            currentSortCol = 'total';
+            currentSortDir = 'desc';
+            updateSortIcons();
+            sortFilteredData();
+            currentPage = 1;
+            renderTable();
+        }
+
+        function changeLimit(val) {
+            currentLimit = parseInt(val);
+            currentPage = 1;
+            renderTable();
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
+        }
+
+        function goToPage(p) {
+            currentPage = p;
+            renderTable();
+        }
+
+        function goToLastPage() {
+            currentPage = totalPages;
+            renderTable();
+        }
+
+        function toggleResultNo() {
+            const f = window.__LAST_FOUND__;
+            if(!f) return;
+            window.__SHOW_FULL_NO__ = !window.__SHOW_FULL_NO__;
+            const el = document.getElementById('result-no');
+            const icon = document.getElementById('eye-icon');
+            if (el) el.textContent = window.__SHOW_FULL_NO__ ? f[0] : maskNoUjian(f[0]);
+            if (icon) icon.className = window.__SHOW_FULL_NO__ ? 'bi bi-eye-slash' : 'bi bi-eye';
+        }
+        // Share Card via Canvas (no external lib) - nomor selalu disensor saat disimpan
+        function buildCardCanvas(found) {
+            const c = document.createElement('canvas');
+            c.width = 800; c.height = 460;
+            const ctx = c.getContext('2d');
+            const isLulus = found[7]==='LULUS';
+            const displayNo = maskNoUjian(found[0]);
+            // bg
+            ctx.fillStyle = isLulus ? '#16a34a' : (found[6] ? '#dc2626' : '#d97706');
+            ctx.fillRect(0,0,800,460);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(12,12,776,436);
+            // header
+            ctx.fillStyle = '#0f172a';
+            ctx.font = '700 26px sans-serif';
+            ctx.fillText('EPS-TOPIK UBT 2026', 32, 56);
+            ctx.font = '400 13px sans-serif';
+            ctx.fillStyle = '#64748b';
+            ctx.fillText('Sektor Manufaktur  •  Hasil Cek Nilai Mandiri', 32, 78);
+            // badge
+            const badgeText = isLulus ? 'LULUS  ✓' : (found[6] ? 'TIDAK LULUS' : 'TIDAK HADIR');
+            ctx.fillStyle = isLulus ? '#16a34a' : (found[6] ? '#dc2626' : '#d97706');
+            ctx.fillRect(32, 98, ctx.measureText(badgeText).width+28, 32);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '700 14px sans-serif';
+            ctx.fillText(badgeText, 46, 118);
+            // data - nomor disensor
+            ctx.fillStyle = '#0f172a';
+            ctx.font = '700 30px monospace';
+            ctx.fillText(displayNo, 32, 170);
+            ctx.font = '700 24px sans-serif';
+            ctx.fillText(found[1], 32, 206);
+            ctx.fillStyle = '#334155';
+            ctx.font = '400 15px sans-serif';
+            ctx.fillText(found[2] + '  •  ' + (found[3].length===8? found[3].slice(0,4)+'-'+found[3].slice(4,6)+'-'+found[3].slice(6):found[3]), 32, 232);
+            // skor box
+            ctx.fillStyle = '#f1f5f9';
+            ctx.fillRect(32, 250, 736, 88);
+            ctx.fillStyle = '#0f172a';
+            ctx.font = '600 13px sans-serif';
+            ctx.fillText('MEMBACA', 52, 276); ctx.fillText('MENDENGAR', 242, 276); ctx.fillText('TOTAL', 452, 276);
+            ctx.font = '800 28px monospace';
+            ctx.fillText(found[4]||'-', 52, 312); ctx.fillText(found[5]||'-', 242, 312);
+            ctx.fillStyle = isLulus ? '#16a34a' : '#0f172a';
+            ctx.fillText(found[6]||'-', 452, 312);
+            ctx.font = '400 11px sans-serif';
+            ctx.fillStyle = '#64748b';
+            ctx.fillText('Standar lulus ≥ 97.5', 452, 328);
+            // footer disclaimer
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '400 10px sans-serif';
+            ctx.fillText('Bukan publikasi resmi KP2MI • Data rekap independen eps.go.kr • Cek resmi di KP2MI', 32, 380);
+            ctx.fillText('Data pribadi terlindungi • Nomor disensor saat dibagikan', 32, 396);
+            return c;
+        }
+        function downloadResultCard() {
+            const f = window.__LAST_FOUND__;
+            if(!f) return;
+            const c = buildCardCanvas(f);
+            const a = document.createElement('a');
+            a.download = `EPS-TOPIK-${f[0]}.png`;
+            a.href = c.toDataURL('image/png');
+            a.click();
+        }
+        async function shareResultCard() {
+            const f = window.__LAST_FOUND__;
+            if(!f) return;
+            const c = buildCardCanvas(f);
+            c.toBlob(async (blob) => {
+                const file = new File([blob], `EPS-${f[0]}.png`, {type:'image/png'});
+                if (navigator.canShare && navigator.canShare({files:[file]})) {
+                    try { await navigator.share({title:'EPS-TOPIK 2026', text:`Hasil ${f[1]} - ${f[7]} (${f[6]} poin)`, files:[file]}); return; } catch(e){}
+                }
+                // fallback download
+                downloadResultCard();
+            }, 'image/png');
+        }
+
+        // Init
+        loadAnalytics();
+        loadPesertaData();
+    </script>
+</body>
+</html>

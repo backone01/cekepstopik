@@ -1,0 +1,18 @@
+# SQLite raw database (kerahasiaan data internal)
+*.dbc
+*.db
+*.sqlite
+*.sqlite3
+
+# Python & Environment
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/
+
+# PDF source files
+*.pdf
+eps/
+downloads/
+temp/
