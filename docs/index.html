@@ -834,54 +834,21 @@
             </div>
         </div>
 
-        <!-- Chat Publik Peserta (Giscus - GitHub Discussions) -->
+        <!-- Chat Publik Peserta - tanpa login, untuk siapapun -->
         <div class="card shadow-sm mt-4" id="section-diskusi">
             <div class="card-header bg-body-tertiary d-flex align-items-center gap-2">
                 <i class="bi bi-chat-dots-fill text-primary"></i>
                 <span class="fw-bold">Diskusi Publik Peserta</span>
-                <span class="badge bg-primary-subtle text-primary border ms-2">Chat untuk siapapun</span>
+                <span class="badge bg-success-subtle text-success border ms-2">Tanpa login • langsung chat</span>
             </div>
             <div class="card-body">
                 <div class="alert alert-info small py-2 mb-3">
-                    <i class="bi bi-info-circle me-1"></i> Chat publik untuk semua peserta. Tanya jawab seputar hasil, Skill Test, dan info EPS-TOPIK. Jaga etika, jangan share data pribadi.
+                    <i class="bi bi-info-circle me-1"></i> Chat publik untuk semua peserta. Tulis nama lalu chat - tanpa login GitHub. Jaga etika, jangan share data pribadi / nomor full.
                 </div>
-                <!-- Giscus akan load di sini setelah repo cekepstopik di-push -->
-                <div id="giscus-container">
-                    <div class="text-center text-secondary small py-4 border rounded bg-body-tertiary">
-                        <div class="spinner-border spinner-border-sm me-2"></div>Memuat diskusi...
-                        <div class="mt-1" style="font-size:0.7rem">Jika belum muncul, pastikan repo <code>cekepstopik</code> sudah di-push & Discussions aktif</div>
-                    </div>
+                <div style="border:1px solid var(--card-border-color);border-radius:0.5rem;overflow:hidden;background:#fff">
+                    <iframe src="https://tlk.io/cekepstopik-eps2026" width="100%" height="480" frameborder="0" style="display:block" allow="autoplay"></iframe>
                 </div>
-                <script>
-                (function(){
-                    // GANTI username/repo sesuai GitHub kamu. Contoh: backone01/cekepstopik
-                    // Cara dapat repoId/categoryId: buka https://giscus.app -> isi repo -> copy script
-                    const GISCUS_REPO = 'backone01/cekepstopik';
-                    const GISCUS_REPO_ID = 'R_kgDOUT9QGw';
-                    const GISCUS_CATEGORY_ID = 'DIC_kwDOUT9QG84DFQBz';
-                    // Jika belum diisi, tampilkan placeholder
-                    if(GISCUS_REPO_ID==='REPLACE_ME'){
-                        document.getElementById('giscus-container').innerHTML = '<div class=\"alert alert-warning small mb-0\"><i class=\"bi bi-exclamation-triangle me-1\"></i> Chat akan aktif setelah push ke GitHub.<br>1. Push <code>docs/</code> ke <code>'+GISCUS_REPO+'</code><br>2. Aktifkan <code>Settings > General > Discussions</code><br>3. Buka <a href=\"https://giscus.app\" target=\"_blank\">giscus.app</a> isi repo -> copy repoId/categoryId -> ganti di file <code>docs/index.html</code></div>';
-                        return;
-                    }
-                    const s=document.createElement('script');
-                    s.src='https://giscus.app/client.js';
-                    s.setAttribute('data-repo',GISCUS_REPO);
-                    s.setAttribute('data-repo-id',GISCUS_REPO_ID);
-                    s.setAttribute('data-category','General');
-                    s.setAttribute('data-category-id',GISCUS_CATEGORY_ID);
-                    s.setAttribute('data-mapping','pathname');
-                    s.setAttribute('data-strict','0');
-                    s.setAttribute('data-reactions-enabled','1');
-                    s.setAttribute('data-emit-metadata','0');
-                    s.setAttribute('data-input-position','bottom');
-                    s.setAttribute('data-theme','preferred_color_scheme');
-                    s.setAttribute('data-lang','id');
-                    s.setAttribute('crossorigin','anonymous');
-                    s.async=true;
-                    document.getElementById('giscus-container').appendChild(s);
-                })();
-                </script>
+                <div class="small text-secondary mt-2" style="font-size:0.72rem"><i class="bi bi-lightbulb me-1"></i>Tips: buka <a href="https://tlk.io/cekepstopik-eps2026" target="_blank">tlk.io/cekepstopik-eps2026</a> di HP biar chat fullscreen. Chat via tlk.io - gratis & tanpa login.</div>
             </div>
         </div>
 
