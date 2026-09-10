@@ -12,7 +12,7 @@
     <!-- Open Graph / WhatsApp / Telegram -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="EPS-TOPIK UBT 2026 - Cek Nilai & Rekap Kelulusan">
-    <meta property="og:description" content="Cek nilai mandiri 17.619 peserta EPS-TOPIK Manufaktur 2026. Lulus 2.031 (97.5 poin). Data rekap independen, bukan rilis resmi KP2MI.">
+    <meta property="og:description" content="Cek nilai mandiri 17.619 peserta EPS-TOPIK Manufaktur 2026. Lulus 2.020 (resmi KP2MI 10-09-2026). Data rekap independen, bukan rilis resmi KP2MI.">
     <meta property="og:image" content="https://via.placeholder.com/1200x630/0d6efd/ffffff?text=EPS-TOPIK+UBT+2026+%7C+17.619+Peserta">
     <meta property="og:url" content="https://backone01.github.io/exam-status-checker/">
     <meta property="og:locale" content="id_ID">
@@ -464,6 +464,9 @@
                 </div>
                 <div class="small text-secondary mt-1 lh-base">
                     Data ini merupakan rekapitulasi hasil ujian peserta EPS-TOPIK 2026. Peserta yang dinyatakan <strong>LULUS (skor &ge; 97.5 poin)</strong> berhak lolos dan mengikuti tahap <strong>Skill Test (Uji Keterampilan)</strong> selanjutnya.
+                    <span class="text-danger fw-semibold d-block mt-1" style="font-size:0.78rem;">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i> Catatan: Kelulusan ditentukan oleh HRD Korea berdasarkan <strong>sistem poin + kuota</strong>, bukan hanya ambang 97.5. Beberapa peserta dengan skor 97.5/100 tidak lulus karena batas kuota.
+                    </span>
                 </div>
             </div>
             <div class="d-flex align-items-center gap-2">
@@ -498,9 +501,9 @@
             <div class="col-6 col-md-4 col-xl">
                 <div class="card h-100 border-start border-success border-3">
                     <div class="card-body">
-                        <div class="stat-card-label">Lulus (&ge; 97.5)</div>
-                        <div class="stat-card-value text-success mt-1 font-mono" id="stat-lulus">2,031</div>
-                        <div class="small text-success-emphasis mt-1" id="stat-lulus-pct">11.53% dari total</div>
+                        <div class="stat-card-label">LULUS Resmi (KP2MI)</div>
+                        <div class="stat-card-value text-success mt-1 font-mono" id="stat-lulus">2,020</div>
+                        <div class="small text-success-emphasis mt-1" id="stat-lulus-pct">11.47% dari total</div>
                     </div>
                 </div>
             </div>
@@ -586,7 +589,7 @@
                 <div class="card h-100 shadow-sm">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span class="fw-bold text-body"><i class="bi bi-pie-chart-fill me-1 text-primary"></i> Proporsi Kelulusan</span>
-                        <span class="badge bg-success font-mono">Standar: 97.5</span>
+                        <span class="badge bg-success font-mono">Resmi: 2.020</span>
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between p-3">
                         <div style="height: 200px; position: relative;">
@@ -596,8 +599,8 @@
                             <div class="col-4">
                                 <div class="p-1.5 rounded bg-success-subtle border border-success-subtle">
                                     <div class="text-success-emphasis" style="font-size: 0.7rem;">LULUS</div>
-                                    <div class="fw-bold text-success fs-6" id="legend-lulus">2,031</div>
-                                    <div class="text-secondary" style="font-size: 0.65rem;">11.5%</div>
+                                    <div class="fw-bold text-success fs-6" id="legend-lulus">2,020</div>
+                                    <div class="text-secondary" style="font-size: 0.65rem;">11.47%</div>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -658,7 +661,7 @@
                     <span class="small text-secondary ms-1">(Rincian seluruh kelipatan 2.5 poin dari skor 10.0 s/d 100.0)</span>
                 </div>
                 <div class="d-flex flex-wrap align-items-center gap-1.5" style="font-size: 0.75rem;">
-                    <span class="badge bg-success text-white font-mono py-1 px-2">&ge; 97.5 (LULUS &bull; 2.031)</span>
+                    <span class="badge bg-success text-white font-mono py-1 px-2">&ge; 97.5 (LULUS &bull; 2.020 resmi)</span>
                     <span class="badge bg-warning text-dark font-mono py-1 px-2">90 - 95 (Passing Tinggi)</span>
                     <span class="badge bg-secondary text-white font-mono py-1 px-2">&lt; 90</span>
                 </div>
@@ -734,7 +737,7 @@
                         <label class="form-label small fw-semibold text-body mb-1">Status Kelulusan</label>
                         <select id="filter-status" onchange="filterClientData()" class="form-select form-select-sm">
                             <option value="ALL">Semua Status</option>
-                            <option value="LULUS">LULUS (&ge; 97.5)</option>
+                            <option value="LULUS">LULUS Resmi (KP2MI)</option>
                             <option value="TIDAK LULUS">TIDAK LULUS (Ada Skor)</option>
                             <option value="TIDAK HADIR">TIDAK HADIR (Nihil)</option>
                         </select>
@@ -995,7 +998,9 @@
                 exactScores.slice().sort((a,b)=>b.skor-a.skor).forEach(s=>{
                     const opt=document.createElement('option');
                     opt.value=s.skor;
-                    const label = s.skor>=97.5 ? `LULUS ${s.skor.toFixed(1)} (${s.total})` : `${s.skor.toFixed(1)} (${s.total} orang)`;
+                    const official = scoreLulusMap[s.skor];
+                    const hasLulus = official && official.lulus > 0;
+                    const label = hasLulus ? `LULUS ${s.skor.toFixed(1)} (${s.total} orang, ${official.lulus} resmi)` : `${s.skor.toFixed(1)} (${s.total} orang)`;
                     opt.textContent=label;
                     nilaiSelect.appendChild(opt);
                 });
@@ -1035,11 +1040,16 @@
                 .slice()
                 .sort((a, b) => parseFloat(a.skor) - parseFloat(b.skor));
 
+            // Build lookup: skor -> {total, lulus} from official status
+            const scoreLulusMap = {};
+            (data.score_lulus_status || []).forEach(s => { scoreLulusMap[s.skor] = s; });
+
             const scoreLabels = allScoresSorted.map(d => parseFloat(d.skor).toFixed(1));
             const scoreValues = allScoresSorted.map(d => d.total);
             const scoreColors = allScoresSorted.map(d => {
                 const s = parseFloat(d.skor);
-                if (s >= 97.5) return '#16a34a'; // Lulus (Hijau)
+                const official = scoreLulusMap[s];
+                if (official && official.lulus > 0) return '#16a34a'; // Ada yang lulus resmi (Hijau)
                 if (s >= 90.0) return '#f59e0b'; // Passing Tinggi (Kuning)
                 return '#94a3b8'; // Di bawah standar (Abu-abu Slate)
             });
@@ -1074,8 +1084,12 @@
                                     title: (ctx) => `Nilai Ujian: ${ctx[0].label} Poin`,
                                     label: (ctx) => {
                                         const skorNum = parseFloat(ctx.label);
-                                        const status = skorNum >= 97.5 ? 'LULUS (Skill Test)' : 'TIDAK LULUS';
-                                        return ` Frekuensi: ${ctx.raw.toLocaleString()} Orang (${status})`;
+                                        const official = scoreLulusMap[skorNum];
+                                        const total = ctx.raw.toLocaleString();
+                                        if (official && official.lulus > 0) {
+                                            return ` ${total} Orang — ${official.lulus.toLocaleString()} LULUS resmi (HRD Korea)`;
+                                        }
+                                        return ` ${total} Orang — TIDAK LULUS`;
                                     }
                                 }
                             }
@@ -1180,39 +1194,44 @@
                 const keyScores = exactScores.filter(d => parseFloat(d.skor) >= 77.5);
                 chartScoreValuesEl.innerHTML = keyScores.map(d => {
                     const skor = parseFloat(d.skor);
-                    const isLulus = skor >= 97.5;
-                    const badgeBg = isLulus ? 'bg-success text-white' : (skor >= 90 ? 'bg-warning-subtle text-warning-emphasis border border-warning-subtle' : 'bg-body-secondary text-secondary border');
+                    const official = scoreLulusMap[skor];
+                    const hasLulus = official && official.lulus > 0;
+                    const badgeBg = hasLulus ? 'bg-success text-white' : (skor >= 90 ? 'bg-warning-subtle text-warning-emphasis border border-warning-subtle' : 'bg-body-secondary text-secondary border');
                     return `
-                        <div class="px-2 py-1 rounded ${badgeBg} small" title="Skor ${skor.toFixed(1)}: ${d.total} Peserta">
-                            <strong>${skor.toFixed(1)}</strong>: <span class="fw-bold">${d.total.toLocaleString()}</span>
+                        <div class="px-2 py-1 rounded ${badgeBg} small" title="Skor ${skor.toFixed(1)}: ${d.total} Peserta${hasLulus ? ' (' + official.lulus + ' LULUS resmi)' : ''}">
+                            <strong>${skor.toFixed(1)}</strong>: <span class="fw-bold">${d.total.toLocaleString()}</span>${hasLulus ? ` <span style="font-size:0.65rem">(${official.lulus} lulus)</span>` : ''}
                         </div>
                     `;
                 }).join('');
             }
 
-            // Rincian Frekuensi Nilai: Aligned Grid Rapi, Lurus, Rata dengan Satuan "Orang" (Hanya Informasi Statistik)
+            // Rincian Frekuensi Nilai: Aligned Grid Rapi, Lurus, Rata dengan Satuan "Orang" + Status Resmi KP2MI
             const pillsContainer = document.getElementById('exact-score-pills');
             if (pillsContainer) {
                 pillsContainer.className = 'score-pill-grid';
                 pillsContainer.innerHTML = exactScores.map(row => {
                     const skor = parseFloat(row.skor);
-                    const isLulus = skor >= 97.5;
+                    const official = scoreLulusMap[skor];
+                    const hasLulus = official && official.lulus > 0;
                     let pillClass = 'pill-regular';
                     let badgeClass = 'bg-body-secondary text-body';
-                    if (isLulus) {
+                    let lulusInfo = '';
+                    if (hasLulus) {
                         pillClass = 'pill-lulus';
                         badgeClass = 'bg-success text-white';
+                        lulusInfo = `<span class="text-success small fw-bold" style="font-size:0.65rem;">${official.lulus.toLocaleString()} LULUS</span>`;
                     } else if (skor >= 90.0) {
                         pillClass = 'pill-high';
                         badgeClass = 'bg-warning-subtle text-warning-emphasis border border-warning-subtle';
                     }
 
                     return `
-                        <div class="score-pill ${pillClass}" title="Nilai ${skor.toFixed(1)}: ${row.total.toLocaleString()} Orang (Semarang: ${row.smg}, Jakarta: ${row.jkt}, Surabaya: ${row.sby})">
+                        <div class="score-pill ${pillClass}" title="Nilai ${skor.toFixed(1)}: ${row.total.toLocaleString()} Orang${hasLulus ? ' (' + official.lulus.toLocaleString() + ' LULUS resmi)' : ''} (Semarang: ${row.smg}, Jakarta: ${row.jkt}, Surabaya: ${row.sby})">
                             <span class="fw-bold">${skor.toFixed(1)}</span>
                             <span class="badge ${badgeClass} py-1 px-1.5 font-mono" style="font-size: 0.72rem;">
                                 ${row.total.toLocaleString()} <span style="font-weight: normal; font-size: 0.65rem;">orang</span>
                             </span>
+                            ${lulusInfo}
                         </div>
                     `;
                 }).join('');
