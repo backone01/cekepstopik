@@ -856,15 +856,13 @@
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem">Live</span>
         </button>
         <!-- Floating Chat Box -->
-        <div id="floatingChatBox" class="card shadow-lg" style="display:block; position:fixed; bottom:88px; right:22px; width:380px; max-width:92vw; height:520px; max-height:70vh; z-index:1055; overflow:hidden;">
+        <div id="floatingChatBox" class="card shadow-lg" style="display:none; position:fixed; bottom:88px; right:22px; width:380px; max-width:92vw; height:520px; max-height:70vh; z-index:1055; overflow:hidden;">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2">
                 <span class="fw-bold small"><i class="bi bi-chat-dots-fill me-1"></i> Diskusi Publik</span>
                 <button class="btn btn-sm btn-light py-0 px-2" onclick="toggleFloatingChat()" style="font-size:0.75rem">× Tutup</button>
             </div>
             <div class="card-body p-0" style="height:calc(100% - 40px); overflow:hidden; background:#fff;">
-                
-                <script src="https://minnit.chat/js/embed.js?c=1772345192" defer></script>
-                <span style="display: none;" class="minnit-chat-sembed" data-chatname="https://organizations.minnit.chat/727783480041775/c/Main?embed" data-style="width:100%; height:100%;" data-version="1.55">Chat</span>
+                <iframe src="https://organizations.minnit.chat/727783480041775/c/Main?embed" style="width:100%; height:100%; border:0;" allow="autoplay"></iframe>
             </div>
         </div>
 
