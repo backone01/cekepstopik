@@ -1485,7 +1485,7 @@
             const gender = document.getElementById('filter-gender').value;
             const nilai = document.getElementById('filter-nilai') ? document.getElementById('filter-nilai').value : 'ALL';
 
-            // Jika query adalah full 8/16 digit, pakai hash lookup exact 1 (hindari 176 karena mask collision)
+            // Jika query adalah full 8/16 digit, pakai hash lookup via async decrypt
             const qUpperClean = query.toUpperCase().replace(/[^A-Z0-9]/g,'');
             const isFullNo = /^\d{8}$/.test(qUpperClean) || /^0122026C\d{8}$/.test(qUpperClean);
             if (isFullNo && query) {
@@ -1493,26 +1493,33 @@
                 if (/^\d{8}$/.test(qUpperClean)) cleanNo = '0122026C' + qUpperClean;
                 let hash16 = '';
                 try { hash16 = pureSha256(cleanNo).substring(0,16).toLowerCase(); } catch(e){}
-                const lookup = (typeof __PESERTA_LOOKUP__ !== 'undefined' ? __PESERTA_LOOKUP__ : (typeof __LOOKUP_DATA__ !== 'undefined' ? __LOOKUP_DATA__ : null)) || (typeof pesertaLookup !== 'undefined' ? pesertaLookup : null);
-                if (lookup) {
-                    const found = lookup[hash16] || lookup[hash16.toUpperCase()] || (Object.keys(lookup).find(k=>k.toLowerCase()===hash16) ? lookup[Object.keys(lookup).find(k=>k.toLowerCase()===hash16)] : null);
-                    if (found) {
-                        const singleRow = Array.isArray(found) ? found : [found.u, found.n, found.l, found.t, found.sm, found.sd, found.st, found.s, found.g];
-                        filteredData = [singleRow];
-                        filteredData = filteredData.filter(r=>true); // keep
-                        // langsung render dan return
-                        // Sorting & pagination
-                        filteredData.sort((a,b)=>0);
-                        currentPage = 1;
-                        renderTable();
-                        return;
-                    } else {
+
+                // Async lookup dari encrypted file
+                getLookupMap().then(lookup => {
+                    if (!lookup) {
                         filteredData = [];
                         currentPage = 1;
                         renderTable();
                         return;
                     }
-                }
+                    const found = lookup[hash16] || lookup[hash16.toUpperCase()] || null;
+                    if (found) {
+                        const singleRow = Array.isArray(found) ? found : [found.u, found.n, found.l, found.t, found.sm, found.sd, found.st, found.s, found.g];
+                        filteredData = [singleRow];
+                        filteredData.sort((a,b)=>0);
+                        currentPage = 1;
+                        renderTable();
+                    } else {
+                        filteredData = [];
+                        currentPage = 1;
+                        renderTable();
+                    }
+                });
+                // Show loading while decrypting
+                filteredData = [];
+                currentPage = 1;
+                renderTable();
+                return;
             }
 
             filteredData = allPesertaData.filter(row => {
