@@ -1389,6 +1389,36 @@
             const lokasi = document.getElementById('filter-lokasi').value;
             const gender = document.getElementById('filter-gender').value;
 
+            // Jika query adalah full 8/16 digit, pakai hash lookup exact 1 (hindari 176 karena mask collision)
+            const qUpperClean = query.toUpperCase().replace(/[^A-Z0-9]/g,'');
+            const isFullNo = /^\d{8}$/.test(qUpperClean) || /^0122026C\d{8}$/.test(qUpperClean);
+            if (isFullNo && query) {
+                let cleanNo = qUpperClean;
+                if (/^\d{8}$/.test(qUpperClean)) cleanNo = '0122026C' + qUpperClean;
+                let hash16 = '';
+                try { hash16 = pureSha256(cleanNo).substring(0,16).toLowerCase(); } catch(e){}
+                const lookup = (typeof __PESERTA_LOOKUP__ !== 'undefined' ? __PESERTA_LOOKUP__ : (typeof __LOOKUP_DATA__ !== 'undefined' ? __LOOKUP_DATA__ : null)) || (typeof pesertaLookup !== 'undefined' ? pesertaLookup : null);
+                if (lookup) {
+                    const found = lookup[hash16] || lookup[hash16.toUpperCase()] || (Object.keys(lookup).find(k=>k.toLowerCase()===hash16) ? lookup[Object.keys(lookup).find(k=>k.toLowerCase()===hash16)] : null);
+                    if (found) {
+                        const singleRow = Array.isArray(found) ? found : [found.u, found.n, found.l, found.t, found.sm, found.sd, found.st, found.s, found.g];
+                        filteredData = [singleRow];
+                        filteredData = filteredData.filter(r=>true); // keep
+                        // langsung render dan return
+                        // Sorting & pagination
+                        filteredData.sort((a,b)=>0);
+                        currentPage = 1;
+                        renderTable();
+                        return;
+                    } else {
+                        filteredData = [];
+                        currentPage = 1;
+                        renderTable();
+                        return;
+                    }
+                }
+            }
+
             filteredData = allPesertaData.filter(row => {
                 // row: [0:full_no, 1:nama, 2:lokasi, 3:tgl, 4:membaca, 5:mendengar, 6:total, 7:status, 8:gender]
                 if (query) {
