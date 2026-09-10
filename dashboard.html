@@ -893,7 +893,7 @@
     <!-- Inline data - load di awal biar pencarian instan (file:// & https://) -->
     <script src="analytics_inline.js"></script>
     <script src="peserta_data_inline.js"></script>
-    <script src="peserta_lookup_inline.js"></script>
+    <!-- peserta_lookup dienkripsi AES-256-GCM, didecrypt di browser -->
 
     <script>
         let allPesertaData = [];
@@ -1303,22 +1303,41 @@
         let lookupMap = null;
         let isLoadingLookup = false;
 
+        // Encrypted lookup config
+        const _LK_URL = 'peserta_lookup.enc';
+        const _LK_PW = 'EPS2026-UBT-KP2MI-SALT-x7f3k9m2';
+        const _LK_IT = 600000;
+
+        async function _decryptLookup(b64) {
+            const raw = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+            const salt = raw.slice(0, 16), iv = raw.slice(16, 28), ct = raw.slice(28);
+            const enc = new TextEncoder();
+            const km = await crypto.subtle.importKey('raw', enc.encode(_LK_PW), 'PBKDF2', false, ['deriveKey']);
+            const key = await crypto.subtle.deriveKey(
+                { name: 'PBKDF2', salt, iterations: _LK_IT, hash: 'SHA-256' },
+                km, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+            );
+            const dec = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
+            const ds = new DecompressionStream('gzip');
+            const w = ds.writable.getWriter();
+            w.write(new Uint8Array(dec)); w.close();
+            return new TextDecoder().decode(await new Response(ds.readable).arrayBuffer());
+        }
+
         async function getLookupMap() {
             if (lookupMap) return lookupMap;
-            if (typeof __LOOKUP_DATA__ !== 'undefined' && __LOOKUP_DATA__) {
-                lookupMap = __LOOKUP_DATA__;
-                return lookupMap;
-            }
             if (isLoadingLookup) {
                 while (isLoadingLookup) await new Promise(r => setTimeout(r, 100));
                 return lookupMap;
             }
             isLoadingLookup = true;
             try {
-                const res = await fetch('peserta_lookup.json');
-                lookupMap = await res.json();
+                const res = await fetch(_LK_URL);
+                const b64 = await res.text();
+                const json = await _decryptLookup(b64);
+                lookupMap = JSON.parse(json);
             } catch (e) {
-                console.error('Gagal memuat peserta_lookup.json:', e);
+                console.error('Gagal load/decrypt lookup:', e);
             } finally { isLoadingLookup = false; }
             return lookupMap;
         }
