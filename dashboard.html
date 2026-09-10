@@ -660,11 +660,11 @@
             </div>
         </div>
 
-        <!-- Rincian Jumlah Lulus Resmi Per Nilai - Full Width -->
+        <!-- Rincian Jumlah Peserta Per Nilai Ujian - Full Width -->
         <div class="card shadow-sm mb-4">
             <div class="card-body py-3">
                 <div class="small fw-semibold text-secondary mb-2 d-flex align-items-center gap-1.5">
-                    <i class="bi bi-grid-3x3-gap-fill text-primary"></i> Rincian Jumlah Lulus Resmi Per Nilai Ujian (Sesuai Pengumuman KP2MI):
+                    <i class="bi bi-grid-3x3-gap-fill text-primary"></i> Rincian Jumlah Peserta Per Nilai Ujian:
                 </div>
                 <div class="score-pill-grid" id="exact-score-pills">
                     <!-- Diisi oleh JavaScript -->
@@ -1139,32 +1139,26 @@
             const locList = document.getElementById('lokasi-summary-list');
             if (locList) {
                 locList.innerHTML = locationStats.map(l => {
-                    const passRate = l.total > 0 ? ((l.lulus / l.total) * 100).toFixed(1) : 0;
                     return `
                         <div class="col-12 col-sm-4">
-                            <div class="p-2 rounded border bg-body h-100 d-flex flex-column justify-content-between">
-                                <div class="d-flex justify-content-between align-items-center mb-1.5">
-                                    <span class="fw-bold text-body small">${l.lokasi}</span>
-                                    <span class="badge bg-success-subtle text-success border font-mono" style="font-size: 0.7rem;">${passRate}% Lulus Resmi</span>
-                                </div>
-                                <div class="row g-1 text-center font-mono" style="font-size: 0.72rem;">
-                                    <div class="col-4">
-                                        <div class="py-1 px-0.5 rounded bg-body-tertiary border">
-                                            <div class="text-secondary" style="font-size: 0.62rem;">TOTAL</div>
-                                            <div class="fw-bold text-body">${l.total.toLocaleString()}</div>
-                                        </div>
+                            <div class="p-2 rounded border bg-body h-100">
+                                <div class="fw-bold text-body small mb-1">${l.lokasi}</div>
+                                <div class="d-flex gap-1 font-mono" style="font-size: 0.72rem;">
+                                    <div class="flex-fill text-center py-1 rounded bg-body-tertiary border">
+                                        <div class="text-secondary" style="font-size: 0.6rem;">TOTAL</div>
+                                        <div class="fw-bold text-body">${l.total.toLocaleString()}</div>
                                     </div>
-                                    <div class="col-4">
-                                        <div class="py-1 px-0.5 rounded bg-success-subtle border border-success-subtle">
-                                            <div class="text-success-emphasis" style="font-size: 0.62rem;">LULUS RESMI</div>
-                                            <div class="fw-bold text-success">${l.lulus.toLocaleString()}</div>
-                                        </div>
+                                    <div class="flex-fill text-center py-1 rounded bg-success-subtle border border-success-subtle">
+                                        <div class="text-success-emphasis" style="font-size: 0.6rem;">LULUS</div>
+                                        <div class="fw-bold text-success">${l.lulus.toLocaleString()}</div>
                                     </div>
-                                    <div class="col-4">
-                                        <div class="py-1 px-0.5 rounded bg-warning-subtle border border-warning-subtle">
-                                            <div class="text-warning-emphasis" style="font-size: 0.62rem;">ABSEN</div>
-                                            <div class="fw-bold text-warning-emphasis">${l.tidak_hadir.toLocaleString()}</div>
-                                        </div>
+                                    <div class="flex-fill text-center py-1 rounded bg-danger-subtle border border-danger-subtle">
+                                        <div class="text-danger-emphasis" style="font-size: 0.6rem;">GAGAL</div>
+                                        <div class="fw-bold text-danger">${l.tidak_lulus.toLocaleString()}</div>
+                                    </div>
+                                    <div class="flex-fill text-center py-1 rounded bg-warning-subtle border border-warning-subtle">
+                                        <div class="text-warning-emphasis" style="font-size: 0.6rem;">ABSEN</div>
+                                        <div class="fw-bold text-warning-emphasis">${l.tidak_hadir.toLocaleString()}</div>
                                     </div>
                                 </div>
                             </div>
@@ -1191,26 +1185,30 @@
                 }).join('');
             }
 
-            // Rincian Frekuensi Nilai: Hanya tampilkan skor yang punya Lulus Resmi KP2MI
+            // Rincian Frekuensi Nilai: Tampilkan SEMUA skor dengan status resmi KP2MI
             const pillsContainer = document.getElementById('exact-score-pills');
             if (pillsContainer) {
                 pillsContainer.className = 'score-pill-grid';
-                const lulusOnly = exactScores.filter(row => {
-                    const s = parseFloat(row.skor);
-                    const official = scoreLulusMap[s];
-                    return official && official.lulus > 0;
-                });
-                pillsContainer.innerHTML = lulusOnly.map(row => {
+                pillsContainer.innerHTML = exactScores.map(row => {
                     const skor = parseFloat(row.skor);
                     const official = scoreLulusMap[skor];
-                    const notLulus = row.total - official.lulus;
+                    const hasLulus = official && official.lulus > 0;
+                    let pillClass = 'pill-regular';
+                    let badgeClass = 'bg-body-secondary text-body border';
+                    if (hasLulus) {
+                        pillClass = 'pill-lulus';
+                        badgeClass = 'bg-success text-white';
+                    } else if (skor >= 90.0) {
+                        pillClass = 'pill-high';
+                        badgeClass = 'bg-warning-subtle text-warning-emphasis border border-warning-subtle';
+                    }
                     return `
-                        <div class="score-pill pill-lulus" title="Skor ${skor.toFixed(1)}: ${official.lulus.toLocaleString()} Lulus Resmi dari ${row.total.toLocaleString()} Peserta">
+                        <div class="score-pill ${pillClass}" title="Skor ${skor.toFixed(1)}: ${row.total.toLocaleString()} Peserta${hasLulus ? ' (' + official.lulus.toLocaleString() + ' LULUS resmi)' : ''}">
                             <span class="fw-bold">${skor.toFixed(1)}</span>
-                            <span class="badge bg-success text-white py-1 px-1.5 font-mono" style="font-size: 0.72rem;">
-                                ${official.lulus.toLocaleString()} <span style="font-weight:normal;font-size:0.62rem;">lulus</span>
+                            <span class="badge ${badgeClass} py-1 px-1.5 font-mono" style="font-size: 0.72rem;">
+                                ${row.total.toLocaleString()} <span style="font-weight:normal;font-size:0.62rem;">orang</span>
                             </span>
-                            ${notLulus > 0 ? `<span class="badge bg-danger-subtle text-danger border border-danger-subtle py-1 px-1.5 font-mono" style="font-size:0.65rem;" title="${notLulus.toLocaleString()} peserta tidak lulus meski ≥97.5">${notLulus.toLocaleString()} tdk lulus</span>` : ''}
+                            ${hasLulus ? `<span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-1 font-mono" style="font-size:0.62rem;">${official.lulus.toLocaleString()} lulus</span>` : ''}
                         </div>
                     `;
                 }).join('');
@@ -1372,6 +1370,21 @@
                     window.__LAST_FOUND__ = found;
                     window.__SHOW_FULL_NO__ = false;
                     const maskedNo = maskNoUjian(found[0]);
+                    const lulusInfo = isLulus
+                        ? `<div class="mt-2 p-2 rounded bg-success-subtle border border-success-subtle d-flex align-items-center gap-2" style="font-size:0.78rem;">
+                                <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                                <div>
+                                    <div class="fw-bold text-success">Selamat! Anda dinyatakan LULUS sesuai pengumuman resmi KP2MI.</div>
+                                    <div class="text-success-emphasis mt-0.5">Selanjutnya berhak mengikuti <strong>Skill Test (Uji Keterampilan)</strong> sesuai jadwal dari HRD Korea.</div>
+                                </div>
+                           </div>`
+                        : (found[6] ? `<div class="mt-2 p-2 rounded bg-danger-subtle border border-danger-subtle d-flex align-items-center gap-2" style="font-size:0.78rem;">
+                                <i class="bi bi-x-circle-fill text-danger fs-5"></i>
+                                <div>
+                                    <div class="fw-bold text-danger">Tidak Lulus sesuai pengumuman resmi KP2MI.</div>
+                                    <div class="text-danger-emphasis mt-0.5">Skor tidak mencukupi atau tidak masuk dalam kuota yang ditetapkan HRD Korea.</div>
+                                </div>
+                           </div>` : '');
                     box.innerHTML = `
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <span class="fw-bold text-primary font-mono d-flex align-items-center gap-1">
@@ -1388,6 +1401,7 @@
                             <span>&bull; Mendengar: <strong>${found[5] || '-'}</strong></span>
                             <span>&bull; Total: <strong class="${isLulus ? 'text-success' : 'text-body'}">${found[6] || '-'}</strong></span>
                         </div>
+                        ${lulusInfo}
                         <div class="d-flex gap-2 mt-3">
                             <button class="btn btn-sm btn-primary flex-fill" onclick="shareResultCard()"><i class="bi bi-share-fill me-1"></i> Bagikan Gambar</button>
                             <button class="btn btn-sm btn-outline-secondary" onclick="downloadResultCard()"><i class="bi bi-download me-1"></i> Unduh PNG</button>
@@ -1873,11 +1887,24 @@
             ctx.font = '400 11px sans-serif';
             ctx.fillStyle = '#64748b';
             ctx.fillText('Standar lulus ≥ 97.5', 452, 328);
+            // info lanjut skill test
+            if (isLulus) {
+                ctx.fillStyle = '#dcfce7';
+                ctx.fillRect(32, 348, 736, 28);
+                ctx.fillStyle = '#166534';
+                ctx.font = '700 12px sans-serif';
+                ctx.fillText('LULUS — Berhak mengikuti Skill Test (Uji Keterampilan) sesuai jadwal HRD Korea', 44, 366);
+            } else if (found[6]) {
+                ctx.fillStyle = '#fef2f2';
+                ctx.fillRect(32, 348, 736, 28);
+                ctx.fillStyle = '#991b1b';
+                ctx.font = '600 12px sans-serif';
+                ctx.fillText('Tidak Lulus — Tidak memenuhi kuota atau ambang batas yang ditetapkan HRD Korea', 44, 366);
+            }
             // footer disclaimer
             ctx.fillStyle = '#94a3b8';
             ctx.font = '400 10px sans-serif';
-            ctx.fillText('Bukan publikasi resmi KP2MI • Data rekap independen eps.go.kr • Cek resmi di KP2MI', 32, 380);
-            ctx.fillText('Data pribadi terlindungi • Nomor disensor saat dibagikan', 32, 396);
+            ctx.fillText('Data rekap independen sesuai pengumuman resmi KP2MI 10-09-2026 • Data pribadi terlindungi', 32, 410);
             return c;
         }
         function downloadResultCard() {
