@@ -1392,8 +1392,14 @@
             filteredData = allPesertaData.filter(row => {
                 // row: [0:full_no, 1:nama, 2:lokasi, 3:tgl, 4:membaca, 5:mendengar, 6:total, 7:status, 8:gender]
                 if (query) {
-                    const matchNo = row[0].toLowerCase().includes(query);
-                    const matchNama = row[1].toLowerCase().includes(query);
+                    const qLower = query.toLowerCase();
+                    const qUpper = query.toUpperCase();
+                    let maskedQ = qLower;
+                    if (/^[0-9C]+$/i.test(query) && query.length >= 4) {
+                        try { maskedQ = maskNoUjian(qUpper).toLowerCase(); } catch(e){}
+                    }
+                    const matchNo = row[0].toLowerCase().includes(qLower) || row[0].toLowerCase().includes(maskedQ);
+                    const matchNama = row[1].toLowerCase().includes(qLower);
                     if (!matchNo && !matchNama) return false;
                 }
 
