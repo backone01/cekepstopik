@@ -1398,7 +1398,12 @@
                     if (/^[0-9C]+$/i.test(query) && query.length >= 4) {
                         try { maskedQ = maskNoUjian(qUpper).toLowerCase(); } catch(e){}
                     }
-                    const matchNo = row[0].toLowerCase().includes(qLower) || row[0].toLowerCase().includes(maskedQ);
+                    let matchNo = false;
+                    if (/^\d{8}$/.test(qUpper) || /^0122026C\d{8}$/.test(qUpper)) {
+                        matchNo = row[0].toLowerCase() === maskedQ;
+                    } else {
+                        matchNo = row[0].toLowerCase().includes(qLower) || row[0].toLowerCase().includes(maskedQ);
+                    }
                     const matchNama = row[1].toLowerCase().includes(qLower);
                     if (!matchNo && !matchNama) return false;
                 }
