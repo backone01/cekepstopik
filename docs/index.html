@@ -1941,10 +1941,13 @@
                 ctx.font = '600 12px sans-serif';
                 ctx.fillText('Tidak Lulus — Tidak memenuhi kuota atau ambang batas yang ditetapkan HRD Korea', 44, 366);
             }
-            // footer disclaimer
+            // footer disclaimer + URL
             ctx.fillStyle = '#94a3b8';
             ctx.font = '400 10px sans-serif';
-            ctx.fillText('Data rekap independen sesuai pengumuman resmi KP2MI 10-09-2026 • Data pribadi terlindungi', 32, 410);
+            ctx.fillText('Data rekap independen sesuai pengumuman resmi KP2MI 10-09-2026 • Data pribadi terlindungi', 32, 395);
+            ctx.fillStyle = '#3b82f6';
+            ctx.font = '600 11px sans-serif';
+            ctx.fillText('Cek hasilmu di: backone01.github.io/cekepstopik/', 32, 415);
             return c;
         }
         function downloadResultCard() {
@@ -1963,7 +1966,7 @@
             c.toBlob(async (blob) => {
                 const file = new File([blob], `EPS-${f[0]}.png`, {type:'image/png'});
                 if (navigator.canShare && navigator.canShare({files:[file]})) {
-                    try { await navigator.share({title:'EPS-TOPIK 2026', text:`Hasil ${f[1]} - ${f[7]} (${f[6]} poin)`, files:[file]}); return; } catch(e){}
+                    try { await navigator.share({title:'EPS-TOPIK 2026', text:`Hasil ${f[1]} - ${f[7]} (${f[6]} poin)\nhttps://backone01.github.io/cekepstopik/`, files:[file]}); return; } catch(e){}
                 }
                 // fallback download
                 downloadResultCard();
