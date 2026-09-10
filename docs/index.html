@@ -834,28 +834,37 @@
             </div>
         </div>
 
-        <!-- Chat Publik Peserta (Giscus - GitHub Discussions) -->
-                <!-- Chat Publik Peserta - Minnit -->
-        <div class="card shadow-sm mt-4" id="section-diskusi">
-            <div class="card-header bg-body-tertiary d-flex align-items-center gap-2">
-                <i class="bi bi-chat-dots-fill text-primary"></i>
-                <span class="fw-bold">Diskusi Publik Peserta</span>
-                <span class="badge bg-success-subtle text-success border ms-2">Live chat</span>
-            </div>
-            <div class="card-body">
-                <div class="alert alert-info small py-2 mb-3">
-                    <i class="bi bi-info-circle me-1"></i> Chat publik untuk semua peserta. Langsung chat tanpa login. Jaga etika, jangan share data pribadi / nomor full.
-                </div>
-                <script src="https://minnit.chat/js/embed.js?c=1772345192" defer></script>
-                <span style="display: none;" class="minnit-chat-sembed" data-chatname="https://organizations.minnit.chat/727783480041775/c/Main?embed" data-style="width:90%; height:500px; max-height:90vh;" data-version="1.55">Chat</span>
-                <p class="powered-by-minnit small text-secondary mt-2" style="font-size:0.72rem"><a href="https://minnit.chat" target="_blank">Chatroom embedded via Minnit Chat</a></p>
-            </div>
+                <!-- Chat Floating (Minnit) + Visitor Counter -->
+        <!-- Visitor Counter -->
+        <div class="d-flex justify-content-center align-items-center gap-2 small text-secondary my-3">
+            <i class="bi bi-eye-fill text-primary"></i>
+            <span>Pengunjung: <strong id="visitorCount" class="text-body font-mono">...</strong></span>
+            <span class="vr"></span>
+            <span><span id="visitorOnline" class="text-success">●</span> Online</span>
         </div>
 
-        <!-- Footer --><!-- Footer -->
-        <footer class="text-center text-secondary small py-4 mt-4 border-top">
-            EPS-TOPIK UBT 2026 Examination Analytics Dashboard &bull; Sektor Manufaktur Gelombang 2026
+        <!-- Footer -->
+        <footer class="text-center text-secondary small py-4 border-top">
+            EPS-TOPIK UBT 2026 Examination Analytics Dashboard &bull; Sektor Manufaktur Gelombang 2026<br>
+            <span class="mt-1 d-inline-block" style="font-size:0.72rem"><i class="bi bi-shield-lock me-1"></i>Data pribadi terlindungi • Bukan publikasi resmi KP2MI</span>
         </footer>
+
+        <!-- Floating Chat Button -->
+        <button id="floatingChatBtn" class="btn btn-primary rounded-circle shadow-lg d-flex align-items-center justify-content-center" style="position:fixed; bottom:22px; right:22px; width:56px; height:56px; z-index:1055;" title="Buka chat">
+            <i class="bi bi-chat-dots-fill fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem">Live</span>
+        </button>
+        <!-- Floating Chat Box -->
+        <div id="floatingChatBox" class="card shadow-lg" style="display:none; position:fixed; bottom:88px; right:22px; width:380px; max-width:92vw; height:520px; max-height:70vh; z-index:1055; overflow:hidden;">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2">
+                <span class="fw-bold small"><i class="bi bi-chat-dots-fill me-1"></i> Diskusi Publik</span>
+                <button class="btn btn-sm btn-light py-0 px-2" onclick="toggleFloatingChat()" style="font-size:0.75rem">× Tutup</button>
+            </div>
+            <div class="card-body p-0" style="height:calc(100% - 40px); overflow:hidden; background:#fff;">
+                <script src="https://minnit.chat/js/embed.js?c=1772345192" defer></script>
+                <span style="display: none;" class="minnit-chat-sembed" data-chatname="https://organizations.minnit.chat/727783480041775/c/Main?embed" data-style="width:100%; height:100%;" data-version="1.55">Chat</span>
+            </div>
+        </div>
 
     </div>
 
@@ -1801,6 +1810,35 @@
             }, 'image/png');
         }
 
+        
+        // Floating Chat Toggle
+        function toggleFloatingChat(){
+            const box=document.getElementById('floatingChatBox');
+            const btn=document.getElementById('floatingChatBtn');
+            if(!box) return;
+            const isHidden=box.style.display==='none' || box.style.display==='';
+            box.style.display=isHidden?'block':'none';
+            if(btn) btn.style.display=isHidden?'none':'flex';
+        }
+        document.addEventListener('DOMContentLoaded',()=>{
+            const btn=document.getElementById('floatingChatBtn');
+            if(btn) btn.addEventListener('click', toggleFloatingChat);
+            // Visitor Counter - countapi + fallback localStorage
+            const el=document.getElementById('visitorCount');
+            const onlineEl=document.getElementById('visitorOnline');
+            try{
+                fetch('https://api.countapi.xyz/hit/cekepstopik-eps2026/visits')
+                  .then(r=>r.json()).then(d=>{ if(el) el.textContent=d.value.toLocaleString('id-ID'); })
+                  .catch(()=>{
+                    let c=parseInt(localStorage.getItem('eps_visits')||'0')+1;
+                    localStorage.setItem('eps_visits',c);
+                    if(el) el.textContent=c.toLocaleString('id-ID')+' (lokal)';
+                  });
+            }catch(e){
+                if(el) el.textContent='—';
+            }
+            if(onlineEl) setInterval(()=>{ onlineEl.style.opacity= onlineEl.style.opacity==='0.4' ? '1' : '0.4'; }, 800);
+        });
         // Init
         loadAnalytics();
         loadPesertaData();
