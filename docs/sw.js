@@ -1,4 +1,4 @@
-const CACHE_NAME = 'eps-v1';
+const CACHE_NAME = 'eps-v2';
 const PRECACHE = [
   'analytics_inline.js',
   'peserta_data.json',
