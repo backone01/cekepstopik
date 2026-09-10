@@ -448,14 +448,14 @@
                                 <span class="input-group-text bg-body border-primary-subtle text-primary">
                                     <i class="bi bi-person-badge"></i>
                                 </span>
-                                <input type="text" id="check-input" class="form-control form-control-lg border-primary-subtle font-mono" placeholder="Masukkan No Ujian atau Nama..." required style="font-size: 0.95rem;">
+                                <input type="text" id="check-input" class="form-control form-control-lg border-primary-subtle font-mono" placeholder="Masukkan No Ujian Lengkap (mis. 0122026C50800016)..." pattern="0122026C[0-9]{8}" maxlength="16" required style="font-size: 0.95rem;">
                             </div>
                             <button type="submit" class="btn btn-primary btn-lg text-nowrap px-4 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-1.5">
                                 <i class="bi bi-search"></i> <span>Cek Nilai</span>
                             </button>
                         </form>
                         <div class="small text-secondary mt-2 d-flex flex-wrap align-items-center gap-2">
-                            <span><i class="bi bi-info-circle text-primary me-1"></i>Dapat mencari berdasarkan <strong>nomor ujian</strong> atau <strong>nama lengkap</strong> (contoh: <code>Budi Santoso</code>).</span>
+                            <span><i class="bi bi-info-circle text-primary me-1"></i>Wajib <strong>16 digit lengkap</strong> diawali <code>0122026C</code> (contoh: <code>0122026C50800016</code>).</span>
                         </div>
                     </div>
                     <div class="col-12 col-lg-5">
@@ -1230,12 +1230,20 @@
             return lookupMap;
         }
 
-        // Candidate Direct Check Search
+        // Candidate Direct Check Search - wajib 16 digit 0122026Cxxxxxxxx
         async function searchCandidate(e) {
             e.preventDefault();
-            const input = document.getElementById('check-input').value.trim();
+            const rawInput = document.getElementById('check-input').value.trim();
+            const input = rawInput.toUpperCase().replace(/[^A-Z0-9]/g,'');
             const box = document.getElementById('check-result-box');
             if (!input) return;
+            if (!/^0122026C\d{8}$/.test(input)) {
+                box.innerHTML = `
+                    <div class="text-danger fw-semibold"><i class="bi bi-exclamation-triangle"></i> Format Nomor Salah</div>
+                    <div class="small text-secondary mt-0.5">Wajib 16 digit lengkap diawali <code>0122026C</code> (contoh: <code>0122026C50800016</code>).</div>
+                `;
+                return;
+            }
 
             box.innerHTML = `
                 <div class="d-flex align-items-center justify-content-center py-2 text-secondary">
@@ -1318,7 +1326,7 @@
                 } else {
                     box.innerHTML = `
                         <div class="text-danger fw-semibold"><i class="bi bi-exclamation-triangle"></i> Nomor Ujian Tidak Ditemukan</div>
-                        <div class="small text-secondary mt-0.5">Pastikan nama atau nomor ujian sudah benar.</div>
+                        <div class="small text-secondary mt-0.5">Nomor tidak ditemukan. Pastikan 16 digit lengkap <code>0122026Cxxxxxxxx</code> sudah benar.</div>
                     `;
                 }
             } catch (err) {
@@ -1371,12 +1379,11 @@
             const gender = document.getElementById('filter-gender').value;
             const nilai = document.getElementById('filter-nilai') ? document.getElementById('filter-nilai').value : 'ALL';
 
-            // Jika query adalah full 8/16 digit, pakai hash lookup via async decrypt
+            // Jika query adalah 16 digit lengkap, pakai hash lookup via async decrypt
             const qUpperClean = query.toUpperCase().replace(/[^A-Z0-9]/g,'');
-            const isFullNo = /^\d{8}$/.test(qUpperClean) || /^0122026C\d{8}$/.test(qUpperClean);
+            const isFullNo = /^0122026C\d{8}$/.test(qUpperClean);
             if (isFullNo && query) {
-                let cleanNo = qUpperClean;
-                if (/^\d{8}$/.test(qUpperClean)) cleanNo = '0122026C' + qUpperClean;
+                const cleanNo = qUpperClean;
                 let hash16 = '';
                 try { hash16 = pureSha256(cleanNo).substring(0,16).toLowerCase(); } catch(e){}
 
