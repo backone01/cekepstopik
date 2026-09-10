@@ -741,6 +741,14 @@
                         </select>
                     </div>
 
+                    <!-- Nilai Filter -->
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <label class="form-label small fw-semibold text-body mb-1">Filter Nilai</label>
+                        <select id="filter-nilai" onchange="filterClientData()" class="form-select form-select-sm">
+                            <option value="ALL">Semua Nilai</option>
+                        </select>
+                    </div>
+
                     <!-- Pengurutan Kolom -->
                     <div class="col-6 col-md-3 col-lg-2">
                         <label for="sort-select" class="form-label small fw-semibold text-body mb-1">Urutkan Data</label>
@@ -960,6 +968,18 @@
             document.getElementById('legend-lulus').innerText = summary.lulus.toLocaleString();
             document.getElementById('legend-tidaklulus').innerText = summary.tidak_lulus_murni.toLocaleString();
             document.getElementById('legend-tidakhadir').innerText = summary.tidak_hadir.toLocaleString();
+
+            // Populate Filter Nilai dropdown lengkap
+            const nilaiSelect = document.getElementById('filter-nilai');
+            if (nilaiSelect && nilaiSelect.options.length === 1) {
+                exactScores.slice().sort((a,b)=>b.skor-a.skor).forEach(s=>{
+                    const opt=document.createElement('option');
+                    opt.value=s.skor;
+                    const label = s.skor>=97.5 ? `LULUS ${s.skor.toFixed(1)} (${s.total})` : `${s.skor.toFixed(1)} (${s.total} orang)`;
+                    opt.textContent=label;
+                    nilaiSelect.appendChild(opt);
+                });
+            }
 
             // 1. Doughnut Chart Kelulusan
             const ctx1 = document.getElementById('chartKelulusan').getContext('2d');
@@ -1391,6 +1411,7 @@
             const status = document.getElementById('filter-status').value;
             const lokasi = document.getElementById('filter-lokasi').value;
             const gender = document.getElementById('filter-gender').value;
+            const nilai = document.getElementById('filter-nilai') ? document.getElementById('filter-nilai').value : 'ALL';
 
             // Jika query adalah full 8/16 digit, pakai hash lookup exact 1 (hindari 176 karena mask collision)
             const qUpperClean = query.toUpperCase().replace(/[^A-Z0-9]/g,'');
@@ -1451,6 +1472,12 @@
 
                 if (lokasi !== 'ALL' && row[2] !== lokasi) return false;
                 if (gender !== 'ALL' && row[8] !== gender) return false;
+
+                if (nilai !== 'ALL') {
+                    const target = parseFloat(nilai);
+                    const rowScore = parseFloat(row[6]);
+                    if (isNaN(rowScore) || rowScore !== target) return false;
+                }
 
                 return true;
             });
@@ -1731,6 +1758,7 @@
             document.getElementById('filter-status').value = 'ALL';
             document.getElementById('filter-lokasi').value = 'ALL';
             document.getElementById('filter-gender').value = 'ALL';
+            const nf=document.getElementById('filter-nilai'); if(nf) nf.value='ALL';
             document.getElementById('sort-select').value = 'skor_desc';
             currentSortCol = 'total';
             currentSortDir = 'desc';
