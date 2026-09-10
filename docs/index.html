@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-bs-theme="light">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,11 +36,6 @@
             --bs-body-bg: #f8fafc;
             --bs-body-color: #1e293b;
             --card-border-color: #e2e8f0;
-        }
-        [data-bs-theme="dark"] {
-            --bs-body-bg: #0f172a;
-            --bs-body-color: #f1f5f9;
-            --card-border-color: #1e293b;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -165,54 +160,6 @@
             background-color: rgba(245, 158, 11, 0.22) !important;
         }
 
-        /* Mode Gelap Tabel */
-        [data-bs-theme="dark"] .table-custom {
-            border-color: #334155;
-        }
-        [data-bs-theme="dark"] .table-custom thead th {
-            background-color: #1e293b;
-            color: #f8fafc;
-            border-bottom: 2px solid #475569;
-            border-right: 1px solid #334155;
-        }
-        [data-bs-theme="dark"] .table-custom thead th:last-child {
-            border-right: none;
-        }
-        [data-bs-theme="dark"] .table-custom tbody td {
-            border-bottom: 1px solid #334155;
-            border-right: 1px solid #334155;
-        }
-        [data-bs-theme="dark"] .table-custom tbody td:last-child {
-            border-right: none;
-        }
-        [data-bs-theme="dark"] .table-custom tbody tr:nth-of-type(even) td {
-            background-color: #111c30;
-        }
-        [data-bs-theme="dark"] .table-custom tbody tr:nth-of-type(odd) td {
-            background-color: #0c1322;
-        }
-        [data-bs-theme="dark"] .table-custom tbody tr:hover td {
-            background-color: rgba(56, 189, 248, 0.18) !important;
-        }
-        [data-bs-theme="dark"] .table-custom tbody tr.row-lulus td {
-            background-color: rgba(34, 197, 94, 0.18) !important;
-        }
-        [data-bs-theme="dark"] .table-custom tbody tr.row-gagal td {
-            background-color: rgba(239, 68, 68, 0.15) !important;
-        }
-        [data-bs-theme="dark"] .table-custom tbody tr.row-absen td {
-            background-color: rgba(245, 158, 11, 0.18) !important;
-        }
-        [data-bs-theme="dark"] .table-custom tbody tr.row-lulus:hover td {
-            background-color: rgba(34, 197, 94, 0.3) !important;
-        }
-        [data-bs-theme="dark"] .table-custom tbody tr.row-gagal:hover td {
-            background-color: rgba(239, 68, 68, 0.25) !important;
-        }
-        [data-bs-theme="dark"] .table-custom tbody tr.row-absen:hover td {
-            background-color: rgba(245, 158, 11, 0.3) !important;
-        }
-
         /* Sortable Table Header */
         .sortable-th {
             cursor: pointer;
@@ -222,10 +169,6 @@
         .sortable-th:hover {
             background-color: #cbd5e1 !important;
             color: #0d6efd;
-        }
-        [data-bs-theme="dark"] .sortable-th:hover {
-            background-color: #334155 !important;
-            color: #38bdf8;
         }
         .sort-icon {
             opacity: 0.35;
@@ -237,9 +180,6 @@
             opacity: 1;
             color: #0d6efd;
             font-weight: bold;
-        }
-        [data-bs-theme="dark"] .sort-icon.active {
-            color: #38bdf8;
         }
 
         /* Mode Kartu Peserta (Alternatif Tabel) */
@@ -254,14 +194,6 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             border-color: #94a3b8;
-        }
-        [data-bs-theme="dark"] .peserta-card {
-            background-color: #111c30;
-            border-color: #334155;
-        }
-        [data-bs-theme="dark"] .peserta-card:hover {
-            border-color: #475569;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         /* Kartu Rincian Frekuensi Nilai (Bukan Tabel) */
@@ -284,10 +216,6 @@
         }
         .score-chip.chip-gagal {
             border-left: 4px solid #dc2626;
-        }
-        [data-bs-theme="dark"] .score-chip {
-            background: #111c30;
-            border-color: #334155;
         }
 
         /* Compact Score Pills Bar & Aligned Grid (Rapi, Lurus, Rata, dengan Satuan "Orang") */
@@ -342,21 +270,6 @@
             background-color: #f1f5f9;
             border-color: #94a3b8;
         }
-        [data-bs-theme="dark"] .score-pill.pill-lulus {
-            background-color: rgba(34, 197, 94, 0.12);
-            border-color: rgba(34, 197, 94, 0.35);
-            color: #86efac;
-        }
-        [data-bs-theme="dark"] .score-pill.pill-high {
-            background-color: rgba(245, 158, 11, 0.12);
-            border-color: rgba(245, 158, 11, 0.35);
-            color: #fcd34d;
-        }
-        [data-bs-theme="dark"] .score-pill.pill-regular {
-            background-color: #111c30;
-            border-color: #334155;
-            color: #cbd5e1;
-        }
 
         .badge-subtle-success {
             background-color: #dcfce7;
@@ -372,21 +285,6 @@
             background-color: #fef3c7;
             color: #b45309;
             border: 1px solid #fde68a;
-        }
-        [data-bs-theme="dark"] .badge-subtle-success {
-            background-color: rgba(34, 197, 94, 0.15);
-            color: #4ade80;
-            border-color: rgba(34, 197, 94, 0.25);
-        }
-        [data-bs-theme="dark"] .badge-subtle-danger {
-            background-color: rgba(239, 68, 68, 0.15);
-            color: #f87171;
-            border-color: rgba(239, 68, 68, 0.25);
-        }
-        [data-bs-theme="dark"] .badge-subtle-warning {
-            background-color: rgba(245, 158, 11, 0.15);
-            color: #fbbf24;
-            border-color: rgba(245, 158, 11, 0.25);
         }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .marquee-track { display:inline-flex; white-space:nowrap; animation: marquee 30s linear infinite; }
@@ -418,14 +316,10 @@
                 <a href="#section-cek-nilai" class="btn btn-primary btn-sm fw-semibold d-inline-flex align-items-center gap-1.5 px-2.5 px-sm-3 py-1.5 rounded-3 shadow-sm text-nowrap">
                     <i class="bi bi-search"></i> <span class="d-none d-sm-inline">Cek Nilai Peserta</span><span class="d-inline d-sm-none">Cek Nilai</span>
                 </a>
-                <button class="btn btn-outline-secondary btn-sm rounded-3 px-2.5 py-1.5 d-flex align-items-center justify-content-center" id="themeToggleBtn" onclick="toggleTheme()" title="Mode Terang / Gelap" style="width: 34px; height: 34px;">
-                    <i class="bi bi-moon-stars" id="themeIcon"></i>
-                </button>
-            </div>
         </div>
     </nav>
     <!-- Marquee Update Resmi -->
-    <div class="bg-warning text-dark border-bottom py-2 marquee-wrap sticky-top" style="font-size:0.82rem; z-index:1030;">
+    <div class="bg-warning text-dark border-bottom py-2 marquee-wrap" style="font-size:0.82rem;">
         <div class="marquee-track fw-semibold">
             <span class="mx-4"><i class="bi bi-megaphone-fill me-1"></i> UPDATE 10-09-2026: Data sudah sinkron dengan pengumuman resmi KP2MI — 2.020 orang dinyatakan LULUS. Silakan cek ulang nomor ujian Anda.</span>
             <span class="mx-4"><a href="https://www.kp2mi.go.id/gtog-detail/korea/pengumuman-hasil-ujian-kemampuan-bahasa-korea-eps-topik-ubt-umum-sektor-manufaktur-tahun-2026" target="_blank" class="text-dark fw-bold text-decoration-underline"><i class="bi bi-box-arrow-up-right me-1"></i>Lihat Pengumuman Resmi KP2MI</a></span>
@@ -466,8 +360,8 @@
                 <span class="badge bg-success text-white px-3 py-2 font-mono fs-7 shadow-sm">
                     <i class="bi bi-check-circle-fill me-1"></i> Standar Kelulusan: &ge; 97.5 Poin
                 </span>
-                <a href="https://www.kp2mi.go.id/gtog-detail/korea/pengumuman-hasil-ujian-kemampuan-bahasa-korea-eps-topik-ubt-umum-sektor-manufaktur-tahun-2026" target="_blank" class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1 text-nowrap">
-                    <i class="bi bi-box-arrow-up-right"></i> Pengumuman Resmi KP2MI
+                <a href="https://www.kp2mi.go.id/gtog-detail/korea/pengumuman-hasil-ujian-kemampuan-bahasa-korea-eps-topik-ubt-umum-sektor-manufaktur-tahun-2026" target="_blank" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 text-nowrap">
+                    <i class="bi bi-box-arrow-up-right"></i> <span class="d-none d-sm-inline">Pengumuman Resmi KP2MI</span><span class="d-inline d-sm-none">KP2MI</span>
                 </a>
             </div>
         </div>
@@ -910,28 +804,6 @@
         let chartSkorDistribusiInstance = null;
         let chartLokasiInstance = null;
 
-        // Dark/Light Theme Handler
-        function toggleTheme() {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-bs-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-bs-theme', next);
-            localStorage.setItem('eps_theme', next);
-            updateThemeIcon(next);
-            loadAnalytics();
-        }
-
-        function updateThemeIcon(theme) {
-            const icon = document.getElementById('themeIcon');
-            if (icon) {
-                icon.className = theme === 'dark' ? 'bi bi-sun-fill text-warning' : 'bi bi-moon-stars';
-            }
-        }
-
-        const savedTheme = localStorage.getItem('eps_theme') || 'light';
-        document.documentElement.setAttribute('data-bs-theme', savedTheme);
-        updateThemeIcon(savedTheme);
-
         // Load static analytics JSON - supports file:// via inline JS
         async function loadAnalytics() {
             if (typeof __ANALYTICS_DATA__ !== 'undefined' && __ANALYTICS_DATA__) {
@@ -955,9 +827,8 @@
         }
         function renderAnalytics(data) {
             hideSkeleton();
-            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
-            const textColor = isDark ? '#94a3b8' : '#64748b';
-            const gridColor = isDark ? '#1e293b' : '#e2e8f0';
+            const textColor = '#64748b';
+            const gridColor = '#e2e8f0';
 
             const summary = data.summary;
             const scoreDist = data.score_distribution;
@@ -1339,7 +1210,21 @@
                 const json = await _decryptLookup(b64);
                 lookupMap = JSON.parse(json);
             } catch (e) {
-                console.error('Gagal load/decrypt lookup:', e);
+                // Fallback: load peserta_lookup_inline.js for file:// protocol
+                try {
+                    await new Promise((resolve, reject) => {
+                        const s = document.createElement('script');
+                        s.src = 'peserta_lookup_inline.js';
+                        s.onload = () => { resolve(); };
+                        s.onerror = () => { reject(new Error('inline load failed')); };
+                        document.head.appendChild(s);
+                    });
+                    if (typeof __PESERTA_LOOKUP__ !== 'undefined') {
+                        lookupMap = __PESERTA_LOOKUP__;
+                    }
+                } catch (e2) {
+                    console.error('Gagal load/decrypt lookup:', e, e2);
+                }
             } finally { isLoadingLookup = false; }
             return lookupMap;
         }
