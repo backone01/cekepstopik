@@ -391,8 +391,9 @@
             color: #fbbf24;
             border-color: rgba(245, 158, 11, 0.25);
         }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .marquee-track { display:inline-block; white-space:nowrap; animation: marquee 25s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .marquee-track { display:inline-flex; white-space:nowrap; animation: marquee 30s linear infinite; }
+        .marquee-track:hover { animation-play-state: paused; }
         .marquee-wrap { overflow:hidden; white-space:nowrap; }
         .cursor-pointer {
             cursor: pointer;
@@ -429,9 +430,14 @@
     <!-- Marquee Update Resmi -->
     <div class="bg-warning text-dark border-bottom py-2 marquee-wrap" style="font-size:0.82rem;">
         <div class="marquee-track fw-semibold">
-            <span class="mx-4"><i class="bi bi-megaphone-fill me-1"></i> UPDATE 10-09-2026: Data sinkron PDF resmi KP2MI — LULUS 2.020 orang (100 & 97.5). 11 data sebelumnya terkoreksi menjadi TIDAK LULUS. Cek ulang nomor Anda. Info Skill Test menyusul.</span>
+            <span class="mx-4"><i class="bi bi-megaphone-fill me-1"></i> UPDATE 10-09-2026: Data sinkron PDF resmi KP2MI — LULUS 2.020 orang. 11 data terkoreksi TIDAK LULUS. Cek ulang nomor Anda.</span>
             <span class="mx-4"><i class="bi bi-info-circle-fill me-1"></i> Bukan publikasi resmi KP2MI — rekap independen eps.go.kr, sinkron 10-09-2026.</span>
             <span class="mx-4"><i class="bi bi-shield-check me-1"></i> Cek nilai via hash SHA-256 di browser, privasi terjaga.</span>
+            <span class="mx-4"><a href="https://www.kp2mi.go.id/gtog-detail/korea/pengumuman-hasil-ujian-kemampuan-bahasa-korea-eps-topik-ubt-umum-sektor-manufaktur-tahun-2026" target="_blank" class="text-dark fw-bold text-decoration-underline">Klik di sini untuk lihat Pengumuman Resmi KP2MI</a></span>
+            <span class="mx-4"><i class="bi bi-megaphone-fill me-1"></i> UPDATE 10-09-2026: Data sinkron PDF resmi KP2MI — LULUS 2.020 orang. 11 data terkoreksi TIDAK LULUS. Cek ulang nomor Anda.</span>
+            <span class="mx-4"><i class="bi bi-info-circle-fill me-1"></i> Bukan publikasi resmi KP2MI — rekap independen eps.go.kr, sinkron 10-09-2026.</span>
+            <span class="mx-4"><i class="bi bi-shield-check me-1"></i> Cek nilai via hash SHA-256 di browser, privasi terjaga.</span>
+            <span class="mx-4"><a href="https://www.kp2mi.go.id/gtog-detail/korea/pengumuman-hasil-ujian-kemampuan-bahasa-korea-eps-topik-ubt-umum-sektor-manufaktur-tahun-2026" target="_blank" class="text-dark fw-bold text-decoration-underline">Klik di sini untuk lihat Pengumuman Resmi KP2MI</a></span>
         </div>
     </div>
 
@@ -464,6 +470,9 @@
                 <span class="badge bg-success text-white px-3 py-2 font-mono fs-7 shadow-sm">
                     <i class="bi bi-check-circle-fill me-1"></i> Standar Kelulusan: &ge; 97.5 Poin
                 </span>
+                <a href="https://www.kp2mi.go.id/gtog-detail/korea/pengumuman-hasil-ujian-kemampuan-bahasa-korea-eps-topik-ubt-umum-sektor-manufaktur-tahun-2026" target="_blank" class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1 text-nowrap">
+                    <i class="bi bi-box-arrow-up-right"></i> Pengumuman Resmi KP2MI
+                </a>
             </div>
         </div>
 
