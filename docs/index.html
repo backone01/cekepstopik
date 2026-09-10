@@ -8,19 +8,21 @@
     <meta name="keywords" content="EPS-TOPIK, UBT 2026, Manufaktur, KP2MI, BP2MI, HRD Korea, cek nilai EPS, kelulusan EPS-TOPIK">
     <meta name="author" content="EPS-TOPIK 2026 Monitoring">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://backone01.github.io/exam-status-checker/">
+    <link rel="canonical" href="https://backone01.github.io/cekepstopik/">
     <!-- Open Graph / WhatsApp / Telegram -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="EPS-TOPIK UBT 2026 - Cek Nilai & Rekap Kelulusan">
     <meta property="og:description" content="Cek nilai mandiri 17.619 peserta EPS-TOPIK Manufaktur 2026. Lulus 2.020 (resmi KP2MI 10-09-2026). Data rekap independen, bukan rilis resmi KP2MI.">
-    <meta property="og:image" content="https://via.placeholder.com/1200x630/0d6efd/ffffff?text=EPS-TOPIK+UBT+2026+%7C+17.619+Peserta">
-    <meta property="og:url" content="https://backone01.github.io/exam-status-checker/">
+    <meta property="og:image" content="https://backone01.github.io/cekepstopik/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://backone01.github.io/cekepstopik/">
     <meta property="og:locale" content="id_ID">
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="EPS-TOPIK UBT 2026 - Dashboard Kelulusan">
     <meta name="twitter:description" content="Rekap 17.619 peserta, passing rate 12.66%. Cek nilai via nomor ujian.">
-    <meta name="twitter:image" content="https://via.placeholder.com/1200x630/0d6efd/ffffff?text=EPS-TOPIK+UBT+2026">
+    <meta name="twitter:image" content="https://backone01.github.io/cekepstopik/og-image.png">
     <meta name="theme-color" content="#0d6efd">
     <!-- Preload heavy assets for faster load -->
     <link rel="preload" href="peserta_data.json" as="fetch" crossorigin>
@@ -298,7 +300,7 @@
 <body>
 
     <!-- Navbar Bersih, Proporsional & Rapi -->
-    <nav class="navbar bg-body border-bottom sticky-top shadow-sm py-2">
+    <nav class="navbar bg-body border-bottom shadow-sm py-2">
         <div class="container-fluid px-3 px-lg-4 d-flex align-items-center justify-content-between flex-nowrap">
             <!-- Brand Logo & Title -->
             <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none m-0 p-0 text-truncate" href="#">
@@ -319,7 +321,7 @@
         </div>
     </nav>
     <!-- Marquee Update Resmi -->
-    <div class="bg-warning text-dark border-bottom py-2 marquee-wrap" style="font-size:0.82rem;">
+    <div class="bg-warning text-dark border-bottom py-2 marquee-wrap sticky-top shadow-sm" style="font-size:0.82rem; z-index:1030;">
         <div class="marquee-track fw-semibold">
             <span class="mx-4"><i class="bi bi-megaphone-fill me-1"></i> UPDATE 10-09-2026: Data sudah sinkron dengan pengumuman resmi KP2MI — 2.020 orang dinyatakan LULUS. Silakan cek ulang nomor ujian Anda.</span>
             <span class="mx-4"><a href="https://www.kp2mi.go.id/gtog-detail/korea/pengumuman-hasil-ujian-kemampuan-bahasa-korea-eps-topik-ubt-umum-sektor-manufaktur-tahun-2026" target="_blank" class="text-dark fw-bold text-decoration-underline"><i class="bi bi-box-arrow-up-right me-1"></i>Lihat Pengumuman Resmi KP2MI</a></span>
@@ -446,14 +448,14 @@
                                 <span class="input-group-text bg-body border-primary-subtle text-primary">
                                     <i class="bi bi-person-badge"></i>
                                 </span>
-                                <input type="text" id="check-input" class="form-control form-control-lg border-primary-subtle font-mono" placeholder="Masukkan No Ujian (misal: 50800016 atau 0122026C50800016)..." required style="font-size: 0.95rem;">
+                                <input type="text" id="check-input" class="form-control form-control-lg border-primary-subtle font-mono" placeholder="Masukkan No Ujian atau Nama..." required style="font-size: 0.95rem;">
                             </div>
                             <button type="submit" class="btn btn-primary btn-lg text-nowrap px-4 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-1.5">
                                 <i class="bi bi-search"></i> <span>Cek Nilai</span>
                             </button>
                         </form>
                         <div class="small text-secondary mt-2 d-flex flex-wrap align-items-center gap-2">
-                            <span><i class="bi bi-info-circle text-primary me-1"></i>Dapat menggunakan <strong>8 digit</strong> nomor (contoh: <code>50800016</code>) atau <strong>16 digit lengkap</strong> (contoh: <code>0122026C50800016</code>).</span>
+                            <span><i class="bi bi-info-circle text-primary me-1"></i>Dapat mencari berdasarkan <strong>nomor ujian</strong> atau <strong>nama lengkap</strong> (contoh: <code>Budi Santoso</code>).</span>
                         </div>
                     </div>
                     <div class="col-12 col-lg-5">
@@ -1316,7 +1318,7 @@
                 } else {
                     box.innerHTML = `
                         <div class="text-danger fw-semibold"><i class="bi bi-exclamation-triangle"></i> Nomor Ujian Tidak Ditemukan</div>
-                        <div class="small text-secondary mt-0.5">Pastikan 16 digit (0122026C...) atau 8 digit nomor ujian sudah benar.</div>
+                        <div class="small text-secondary mt-0.5">Pastikan nama atau nomor ujian sudah benar.</div>
                     `;
                 }
             } catch (err) {
